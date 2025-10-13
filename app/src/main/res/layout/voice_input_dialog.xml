@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="@drawable/rounded_dialog_bg">
+
+    <!-- App Logo -->
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/blink"
+        android:contentDescription="@string/app_name"
+        android:layout_marginBottom="12dp" />
+
+    <!-- App Name -->
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name_voice_input"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Mic Container with pulsing effect -->
+    <FrameLayout
+        android:id="@+id/micContainer"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center">
+
+        <!-- Pulsing background (animated in Kotlin) -->
+        <View
+            android:id="@+id/pulseView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/pulse_circle"
+            android:visibility="gone"/>
+
+        <!-- Mic Button -->
+        <ImageView
+            android:id="@+id/micButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@android:drawable/ic_btn_speak_now"
+            android:tint="@color/colorAccent"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <!-- Status -->
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_to_start"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

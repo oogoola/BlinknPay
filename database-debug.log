@@ -1,0 +1,8 @@
+01:38:40.787 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+01:38:41.148 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+01:39:13.026 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - myboom-ffef4-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 324ms, init: 0ms
+01:39:13.236 [NamespaceSystem-blocking-namespace-operation-dispatcher-6] INFO com.firebase.core.namespace.StateManager - Namespace myboom-ffef4-default-rtdb status Active to Active
+02:05:39.759 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+02:05:39.875 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: myboom-ffef4-default-rtdb
+02:05:39.909 [NamespaceSystem-akka.actor.default-dispatcher-10] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for myboom-ffef4-default-rtdb
+02:05:39.924 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

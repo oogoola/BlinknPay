@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "256602790271",
+    "project_id": "myboom-ffef4",
+    "storage_bucket": "myboom-ffef4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256602790271:android:ec1b4222bdad04170d224a",
+        "android_client_info": {
+          "package_name": "com.example.blinknpay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpIAtxoBkUqyS7NuFhlerBBaK6KBASeaQ"
+        },
+        {
+          "current_key": "AIzaSyAKPpGahOii0_2F3DM6RlevAlU9iRmZG5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256602790271:android:47af2fdf1c86b4e90d224a",
+        "android_client_info": {
+          "package_name": "com.example.myboom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpIAtxoBkUqyS7NuFhlerBBaK6KBASeaQ"
+        },
+        {
+          "current_key": "AIzaSyAKPpGahOii0_2F3DM6RlevAlU9iRmZG5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

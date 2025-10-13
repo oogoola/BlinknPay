@@ -1,0 +1,80 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Circle container for logo or fallback text -->
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp">
+
+        <!-- Merchant logo -->
+        <ImageView
+            android:id="@+id/receiverIconImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:contentDescription="Merchant Logo" />
+
+        <!-- Fallback first-letter icon -->
+        <TextView
+            android:id="@+id/receiverIconText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@drawable/circle_background"
+            android:contentDescription="Merchant Icon Text"/>
+    </FrameLayout>
+
+    <!-- Right side info -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+        <!-- Merchant name -->
+        <TextView
+            android:id="@+id/receiverName"
+            android:text="Merchant Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Merchant category -->
+        <TextView
+            android:id="@+id/receiverCategory"
+            android:text="Category"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+
+        <!-- Merchant distance (optional, RSSI) -->
+        <TextView
+            android:id="@+id/receiverDistance"
+            android:text="20m away"
+            android:textSize="12sp"
+            android:textColor="#4CAF50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

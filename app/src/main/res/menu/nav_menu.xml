@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_payment"
+        android:title="Payment" />
+    <item
+        android:id="@+id/nav_voice_pay"
+        android:title="Voice Pay" />
+    <item
+        android:id="@+id/nav_scan"
+        android:title="Scan Merchants" />
+</menu>
