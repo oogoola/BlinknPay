@@ -5,7 +5,12 @@ const axios = require("axios");
 const crypto = require("crypto");
 
 // ----- Initialize Firebase Admin -----
-admin.initializeApp();
+// ----- Initialize Firebase Admin -----
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: "https://myboom-ffef4.firebaseio.com", // ✅ Explicitly set your Realtime DB URL
+});
+
 
 // ----- Emulator detection (local dev) -----
 
