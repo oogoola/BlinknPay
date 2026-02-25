@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors -->
+    <color name="colorPrimary">#4CAF50</color>        <!-- Green -->
+    <color name="colorPrimaryDark">#2E7D32</color>   <!-- Darker green -->
+    <color name="colorAccent">#FFEB3B</color>        <!-- Yellow accent -->
+
+    <!-- Text and button colors (for readability in dark mode) -->
+    <color name="onPrimary">#000000</color>          <!-- Black text on primary button -->
+    <color name="onSecondary">#FFFFFF</color>        <!-- White text on secondary button -->
+
+    <!-- Background and surfaces -->
+    <color name="colorBackground">#121212</color>    <!-- Dark background -->
+    <color name="colorSurface">#121212</color>       <!-- Dark surfaces/cards -->
+    <color name="colorOnBackground">#FFFFFF</color>  <!-- White text on background -->
+    <color name="colorOnSurface">#FFFFFF</color>     <!-- White text on surfaces -->
+
+    <color name="chartreuse">#7FFF00</color> <!-- Chartreuse stays same -->
+    <color name="universal_text">#FFFFFF</color>
+    <color name="universal_hint">#CCCCCC</color>
+    <color name="universal_stroke">#4CAF50</color>
+    <color name="primary_text">#FFFFFF</color>
+    <color name="bg_soft">#121212</color>
+
+</resources>

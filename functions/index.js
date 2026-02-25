@@ -16,7 +16,7 @@ admin.initializeApp({
 
 
 if (process.env.FUNCTIONS_EMULATOR) {
-  const EMULATOR_HOST = "192.168.1.100"; // your LAN IP
+  const EMULATOR_HOST = "192.168.0.103"; // your LAN IP
   console.log("⚡ Running in emulator mode. Connecting Firestore, Database, Storage to local emulators.");
 
   // Firestore
@@ -136,9 +136,13 @@ exports.createMpesaPayment = functions.https.onCall(async (data, context) => {
     PartyA: phone,
     PartyB: shortcode,
     PhoneNumber: phone,
-    CallBackURL: merchant.payment.callbackUrl || `${functions.config().base.callback_url}/mpesaCallback`,
+
+CallBackURL: "https://us-central1-myboom-ffef4.cloudfunctions.net/stkPushCallback",
+
     AccountReference: merchant.displayName,
     TransactionDesc: `Payment to ${merchant.displayName} (paymentId=${paymentId})`,
+
+
   };
 
   try {
@@ -159,37 +163,9 @@ exports.createMpesaPayment = functions.https.onCall(async (data, context) => {
   }
 });
 
-// ===== mpesaCallback (HTTP endpoint) =====
-exports.mpesaCallback = functions.https.onRequest(async (req, res) => {
-  try {
-    const callback = req.body;
-    const stkCallback = callback.Body && callback.Body.stkCallback;
-    if (!stkCallback) {
-      console.error("Invalid callback", callback);
-      return res.status(400).send("Invalid callback");
-    }
 
-    const checkoutId = stkCallback.CheckoutRequestID;
-    const q = await db.collection("payments").where("mpesa.CheckoutRequestID", "==", checkoutId).limit(1).get();
 
-    if (!q.empty) {
-      const pdoc = q.docs[0];
-      const result = stkCallback.ResultCode === 0 ? "SUCCESS" : "FAILED";
-      await pdoc.ref.update({
-        status: result,
-        mpesaCallback: stkCallback,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-    } else {
-      console.warn("Payment not found for CheckoutRequestID", checkoutId);
-    }
 
-    res.status(200).send({ message: "callback processed" });
-  } catch (e) {
-    console.error("Callback error", e);
-    res.status(500).send("error");
-  }
-});
 
 // ===== resolveMerchant (callable) =====
 exports.resolveMerchant = functions.https.onCall(async (data, context) => {
@@ -217,3 +193,51 @@ exports.resolveMerchant = functions.https.onCall(async (data, context) => {
     detectedVia: signalType
   };
 });
+
+
+
+exports.stkPushCallback = functions.https.onRequest(async (req, res) => {
+    const payload = req.body;
+
+    if (!payload.Body.stkCallback) {
+        return res.status(400).send("Invalid callback");
+    }
+
+    const callback = payload.Body.stkCallback;
+    const resultCode = callback.ResultCode;
+
+    // Extract userId from AccountReference
+    const accountRef = callback.AccountReference || "";  // "user:12345"
+    const userId = accountRef.replace("user:", "");
+
+    const amount = callback.CallbackMetadata?.Item?.find(i => i.Name === "Amount")?.Value || 0;
+
+    if (!userId) {
+        console.error("Missing userId in callback");
+        return res.status(400).send("No userId encoded");
+    }
+
+    if (resultCode === 0) {
+        await db.collection("users")
+          .doc(userId)
+          .collection("transactions")
+          .add({
+              amount,
+              status: "SUCCESS",
+              timestamp: admin.firestore.FieldValue.serverTimestamp()
+          });
+    } else {
+        await db.collection("users")
+          .doc(userId)
+          .collection("transactions")
+          .add({
+              amount,
+              status: "FAILED",
+              timestamp: admin.firestore.FieldValue.serverTimestamp()
+          });
+    }
+
+    res.status(200).send("Callback received");
+});
+
+

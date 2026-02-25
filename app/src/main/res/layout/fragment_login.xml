@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg_soft">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="16dp">
+
+        <!-- Hero Image -->
+        <ImageView
+            android:id="@+id/pinHero"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/blinky"
+            android:background="@drawable/rounded_top_mask"/>
+
+        <!-- Header -->
+        <TextView
+            android:id="@+id/tvLoginHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secure Access"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_text"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/tvLoginSubHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter your 4-digit PIN"
+            android:textSize="14sp"
+            android:textColor="@color/secondary_text"
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+
+
+
+        <!-- ========================================================= -->
+        <!-- PIN / OTP CONTAINER -->
+        <!-- ========================================================= -->
+        <LinearLayout
+            android:id="@+id/pinContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp">
+
+            <EditText
+                android:id="@+id/otp1"
+                style="@style/OtpEditTextStyle"
+                android:importantForAutofill="no"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:contentDescription="PIN digit 1"/>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="1dp"/>
+
+            <EditText
+                android:id="@+id/otp2"
+                style="@style/OtpEditTextStyle"
+                android:importantForAutofill="no"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:contentDescription="PIN digit 2"/>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="1dp"/>
+
+            <EditText
+                android:id="@+id/otp3"
+                style="@style/OtpEditTextStyle"
+                android:importantForAutofill="no"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:contentDescription="PIN digit 3"/>
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="1dp"/>
+
+            <EditText
+                android:id="@+id/otp4"
+                style="@style/OtpEditTextStyle"
+                android:importantForAutofill="no"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:contentDescription="PIN digit 4"/>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+        <!-- ========================================================= -->
+        <!-- KEYPAD -->
+        <!-- ========================================================= -->
+        <GridLayout
+            android:id="@+id/numberPad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="4"
+            android:alignmentMode="alignBounds"
+            android:useDefaultMargins="false"
+            android:layout_gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="8dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Row 1 -->
+            <Button
+                android:id="@+id/btn1"
+                style="@style/KeypadButtonStyle"
+                android:text="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn2"
+                style="@style/KeypadButtonStyle"
+                android:text="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn3"
+                style="@style/KeypadButtonStyle"
+                android:text="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <!-- Row 2 -->
+            <Button
+                android:id="@+id/btn4"
+                style="@style/KeypadButtonStyle"
+                android:text="4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn5"
+                style="@style/KeypadButtonStyle"
+                android:text="5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn6"
+                style="@style/KeypadButtonStyle"
+                android:text="6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <!-- Row 3 -->
+            <Button
+                android:id="@+id/btn7"
+                style="@style/KeypadButtonStyle"
+                android:text="7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn8"
+                style="@style/KeypadButtonStyle"
+                android:text="8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn9"
+                style="@style/KeypadButtonStyle"
+                android:text="9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <!-- Row 4 -->
+            <ImageButton
+                android:id="@+id/btnFingerprint"
+                style="@style/KeypadIconButtonStyle"
+                android:src="@drawable/ic_fingerprint3"
+                android:contentDescription="@string/fingerprint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <Button
+                android:id="@+id/btn0"
+                style="@style/KeypadButtonStyle"
+                android:text="0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                style="@style/KeypadIconButtonStyle"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="@string/delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"/>
+
+        </GridLayout>
+
+
+
+
+
+
+
+
+
+        <!-- Footer -->
+        <TextView
+            android:id="@+id/txtGoToRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not registered? Create account"
+            android:textSize="14sp"
+            android:textColor="@color/purple_500"
+            android:layout_gravity="center"
+            android:paddingVertical="12dp"/>
+
+    </LinearLayout>
+</ScrollView>

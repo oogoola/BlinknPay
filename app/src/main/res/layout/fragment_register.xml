@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_soft"
+    android:fillViewport="true"
+    android:paddingHorizontal="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="top">
+
+        <!-- Hero Image -->
+        <ImageView
+            android:id="@+id/registerHero"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/blinky"
+            android:background="@drawable/rounded_top_mask" />
+
+        <!-- Header -->
+        <TextView
+            android:id="@+id/tvRegisterHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New User? Register Here"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/primary_text"
+            android:layout_marginTop="12dp"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal" />
+
+        <Space android:layout_width="match_parent" android:layout_height="16dp"/>
+
+        <!-- Full Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxStrokeColor="@color/universal_stroke"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:hintTextColor="@color/universal_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:textColor="@color/universal_text"
+                android:textColorHint="@color/universal_hint" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space android:layout_width="match_parent" android:layout_height="10dp" />
+
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegPhone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxStrokeColor="@color/universal_stroke"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:hintTextColor="@color/universal_hint">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccp_defaultNameCode="KE"
+                app:ccp_showFlag="true"
+                app:ccp_showPhoneCode="true"
+                app:ccp_showFullName="false"
+                app:ccp_showNameCode="false"
+                app:ccp_textSize="14sp"
+                app:ccp_contentColor="@color/universal_text" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Phone number"
+                android:inputType="phone"
+                android:textColor="@color/universal_text"
+                android:textColorHint="@color/universal_hint"
+                android:importantForAutofill="no" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <Space android:layout_width="match_parent" android:layout_height="10dp" />
+
+
+
+        <!-- 4-digit Transaction PIN -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegPin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxStrokeColor="@color/universal_stroke"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:hintTextColor="@color/universal_hint"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegPin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="4-digit PIN"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:importantForAutofill="no"
+                android:textAlignment="center"
+                android:letterSpacing="0.3"
+                android:textColor="@color/universal_text"
+                android:textColorHint="@color/universal_hint" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+
+        <Space android:layout_width="match_parent" android:layout_height="10dp" />
+
+        <!-- Optional Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxStrokeColor="@color/universal_stroke"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="3dp"
+            app:hintTextColor="@color/universal_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Email (optional)"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/universal_text"
+                android:textColorHint="@color/universal_hint" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space android:layout_width="match_parent" android:layout_height="16dp" />
+
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegister"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Register"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_register"
+            app:strokeWidth="0dp"
+            app:useMaterialThemeColors="false"/>
+
+
+
+        <Space android:layout_width="match_parent" android:layout_height="16dp" />
+
+        <!-- Already have an account -->
+        <LinearLayout
+            android:id="@+id/btnGoToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/blink" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Already have an account? Login"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Space android:layout_width="match_parent" android:layout_height="24dp"/>
+    </LinearLayout>
+</ScrollView>

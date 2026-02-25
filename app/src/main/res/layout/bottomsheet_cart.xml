@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Cart Title -->
+    <TextView
+        android:id="@+id/tvCartTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Cart"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#111111"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- RecyclerView for cart items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cartRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
+
+    <!-- Total Amount -->
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: KSh 0"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#111111"
+        android:layout_marginTop="12dp"/>
+
+    <!-- Checkout Button -->
+    <Button
+        android:id="@+id/btnCheckout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checkout"
+        android:textAllCaps="false"
+        android:backgroundTint="#6CAF10"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"/>
+
+</LinearLayout>

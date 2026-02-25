@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Catalog Title -->
+    <TextView
+        android:id="@+id/catalogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Catalog"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/emptyCatalogText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No products available"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="@android:color/darker_gray"
+        android:visibility="gone"
+        android:padding="24dp"/>
+
+    <!-- Product List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/catalogRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:scrollbars="vertical"/>
+</LinearLayout>

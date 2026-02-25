@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <!-- Default background color (will be overridden programmatically) -->
-    <solid android:color="#9C27B0"/>
+    <!-- Lime background color -->
+    <solid android:color="#CDDC39"/> <!-- Material Lime 500 -->
 
     <size
         android:width="48dp"

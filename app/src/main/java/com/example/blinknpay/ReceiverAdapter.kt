@@ -1,7 +1,6 @@
-package com.example.blinkpay
+package com.example.blinknpay
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.example.blinknpay.R
 import java.util.Locale
-import com.example.blinknpay.Receiver
 
 class ReceiverAdapter(
     context: Context,
@@ -70,11 +68,15 @@ class ReceiverAdapter(
                     "Serena Hotel" to "#FF6F00",      // orange
                     "Naivas Supermarket" to "#03A9F4" // blue
                 )
-                val bgColor = colorMap[receiver.businessName] ?: "#9C27B0" // default purple
 
+                // Determine background color
+                val bgColor = colorMap[receiver.businessName]?.let { android.graphics.Color.parseColor(it) }
+                    ?: ContextCompat.getColor(context, R.color.maroon)
+
+                // Set circular background
                 val bg = GradientDrawable()
                 bg.shape = GradientDrawable.OVAL
-                bg.setColor(Color.parseColor(bgColor))
+                bg.setColor(bgColor)
                 iconText.background = bg
             }
         }

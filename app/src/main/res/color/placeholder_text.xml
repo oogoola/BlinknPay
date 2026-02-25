@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark mode -->
+    <item android:color="#B0B0B0" android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <!-- Light mode -->
+    <item android:color="#707070" android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <!-- Default fallback -->
+    <item android:color="#888888" />
+
+</selector>

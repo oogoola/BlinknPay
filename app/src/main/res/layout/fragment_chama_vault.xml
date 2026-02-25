@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#050505"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+
+
+
+
+
+        <HorizontalScrollView
+            android:id="@+id/currency_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/currency_filter_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_kes"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KES"
+                    app:chipIcon="@drawable/ic_flag_kenya"
+                    app:chipIconTint="@null"
+                    app:chipBackgroundColor="#266CAF10" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_usd"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USD"
+                    app:chipIcon="@drawable/ic_us"
+                    app:chipIconTint="@null" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_gbp"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GBP"
+                    app:chipIcon="@drawable/ic_flag_uk"
+                    app:chipIconTint="@null" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cad"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAD"
+                    app:chipIcon="@drawable/ic_flag_canada"
+                    app:chipIconTint="@null" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_eur"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EUR"
+                    app:chipIcon="@drawable/ic_flag_euro"
+                    app:chipIconTint="@null" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_vault"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="#121212"
+            app:cardCornerRadius="32dp"
+            app:strokeColor="#1A6CAF10"
+            app:strokeWidth="2dp"
+            app:layout_constraintTop_toBottomOf="@id/currency_nav">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="24dp">
+                <TextView android:id="@+id/label_vault" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="INFLATION-PROTECTED VAULT" android:textColor="#888888" android:textSize="10sp" android:letterSpacing="0.1" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
+                <TextView android:id="@+id/tv_total_balance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="KES 1,240,500.00" android:textColor="#FFFFFF" android:textSize="32sp" android:textStyle="bold" android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@id/label_vault" app:layout_constraintStart_toStartOf="parent"/>
+                <TextView android:id="@+id/tv_hard_equivalent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="≈ $ 9,426.12" android:textColor="#6CAF10" android:textSize="14sp" android:alpha="0.8" app:layout_constraintTop_toBottomOf="@id/tv_total_balance" app:layout_constraintStart_toStartOf="parent"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" app:layout_constraintBottom_toBottomOf="parent">
+                    <TextView android:id="@+id/tv_inflow" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="↑ KES 45k this month" android:textColor="#6CAF10" android:textSize="12sp"/>
+                    <TextView android:id="@+id/tv_outflow" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="↓ KES 12k payout" android:textColor="#FF5252" android:textSize="12sp" android:gravity="end"/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_active_authorization"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#1A0D0D"
+            app:cardCornerRadius="24dp"
+            app:strokeColor="#4DFF5252"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/card_vault">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/label_auth_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PENDING PAYOUT QUORUM"
+                    android:textColor="#FF5252"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tv_quorum_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3/3 Physical"
+                    android:background="#33FF5252"
+                    android:textColor="#FF5252"
+                    android:textSize="9sp"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tv_auth_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KES 65,000.00"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/label_auth_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="4dp"/>
+
+                <LinearLayout
+                    android:id="@+id/signatory_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auth_amount"
+                    app:layout_constraintStart_toStartOf="parent">
+                    <include layout="@layout/view_signatory_orb" android:id="@+id/sig_chairperson"/>
+                    <include layout="@layout/view_signatory_orb" android:id="@+id/sig_treasurer"/>
+                    <include layout="@layout/view_signatory_orb" android:id="@+id/sig_secretary"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_quorum_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Scanning for signatories...\nVerification required."
+                    android:textColor="#888888"
+                    android:textSize="11sp"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintBottom_toBottomOf="@id/signatory_row"
+                    app:layout_constraintStart_toEndOf="@id/signatory_row"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/signatory_row" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/label_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LIVE TRANSPARENT FEED"
+            android:textColor="#888888"
+            android:textSize="11sp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@id/card_active_authorization"
+            app:layout_goneMarginTop="28dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_contributions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintTop_toBottomOf="@id/label_feed" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_blink_authorize"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="BLINK TO AUTHORIZE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:backgroundTint="#6CAF10"
+            android:enabled="false"
+            android:alpha="0.4"
+            app:cornerRadius="16dp"
+            app:layout_constraintTop_toBottomOf="@id/rv_contributions"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_card_rounded_outer"
+    android:elevation="10dp">
+
+    <!-- ========================= -->
+    <!-- RAIL LOGO -->
+    <!-- ========================= -->
+    <ImageView
+        android:id="@+id/ivRailLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_mpesa" />
+
+    <!-- ========================= -->
+    <!-- TITLE -->
+    <!-- ========================= -->
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pay Merchant"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#111"
+        android:layout_gravity="center"/>
+
+    <!-- ========================= -->
+    <!-- SUBTITLE -->
+    <!-- ========================= -->
+    <TextView
+        android:id="@+id/tvDialogSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter amount via MPESA"
+        android:textSize="14sp"
+        android:textColor="#777"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="center"/>
+
+    <!-- ========================= -->
+    <!-- AMOUNT INPUT -->
+    <!-- ========================= -->
+    <EditText
+        android:id="@+id/etAmountInput"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:hint="Amount (KSh)"
+        android:textSize="16sp"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/bg_input_rounded"/>
+
+    <!-- ========================= -->
+    <!-- BUTTONS -->
+    <!-- ========================= -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:backgroundTint="#EEEEEE"
+            android:textColor="#333"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnPay"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Pay"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#6CAF10"/>
+    </LinearLayout>
+
+</LinearLayout>

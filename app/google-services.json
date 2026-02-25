@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "256602790271",
-    "project_id": "myboom-ffef4",
-    "storage_bucket": "myboom-ffef4.firebasestorage.app"
+    "project_number": "358623370620",
+    "firebase_url": "https://blinknpay-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "blinknpay",
+    "storage_bucket": "blinknpay.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:256602790271:android:ec1b4222bdad04170d224a",
+        "mobilesdk_app_id": "1:358623370620:android:fda9fc8f521021fa6318f9",
         "android_client_info": {
           "package_name": "com.example.blinknpay"
         }
@@ -15,10 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDpIAtxoBkUqyS7NuFhlerBBaK6KBASeaQ"
-        },
-        {
-          "current_key": "AIzaSyAKPpGahOii0_2F3DM6RlevAlU9iRmZG5A"
+          "current_key": "AIzaSyCfMvPct7uLfDOR4As2DNk_GT4K2SC9MTs"
         }
       ],
       "services": {
@@ -29,18 +27,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:256602790271:android:47af2fdf1c86b4e90d224a",
+        "mobilesdk_app_id": "1:358623370620:android:9c0759ea6b7849556318f9",
         "android_client_info": {
-          "package_name": "com.example.myboom"
+          "package_name": "com.example.blinknpaymerchant"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDpIAtxoBkUqyS7NuFhlerBBaK6KBASeaQ"
-        },
-        {
-          "current_key": "AIzaSyAKPpGahOii0_2F3DM6RlevAlU9iRmZG5A"
+          "current_key": "AIzaSyCfMvPct7uLfDOR4As2DNk_GT4K2SC9MTs"
         }
       ],
       "services": {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Default background -->
+    <item android:drawable="@drawable/otp_digit_background" />
+
+    <!-- Animated layer for pulsating green -->
+    <item>
+        <animated-rotate
+            android:drawable="@drawable/otp_digit_green_layer"
+            android:fromDegrees="0"
+            android:toDegrees="360"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:duration="800"
+            android:repeatCount="infinite"/>
+    </item>
+
+</animated-selector>

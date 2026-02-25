@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardTransaction"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:foregroundGravity="center"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Sender Profile -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/senderProfileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_profile_placeholder"
+            android:contentDescription="Sender Profile"
+            android:layout_marginEnd="12dp"/>
+
+        <!-- Transaction Info -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <!-- Sender Name -->
+            <TextView
+                android:id="@+id/receivedFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
+
+            <!-- Transaction Amount -->
+            <TextView
+                android:id="@+id/receivedAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KSh 1,250"
+                android:textSize="14sp"
+                android:textColor="@color/lime_green"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Timestamp -->
+            <TextView
+                android:id="@+id/receivedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today • 4:35 PM"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="2dp"/>
+
+            <!-- Transaction ID -->
+            <TextView
+                android:id="@+id/transactionId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Txn ID: BLN-8392A7F"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

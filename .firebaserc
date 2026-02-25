@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "myboom-ffef4"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

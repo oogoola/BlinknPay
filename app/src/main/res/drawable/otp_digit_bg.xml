@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Soft neutral color that works on light & dark mode -->
+    <solid android:color="#4CAF50" /> <!-- or use @color/your_green -->
+
+    <!-- Fully rounded corners -->
+    <corners android:radius="50dp" />
+
+    <!-- Inner padding -->
+    <padding
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp"
+        android:bottom="10dp" />
+
+    <!-- Size for uniform circle-like digits -->
+    <size android:width="70dp" android:height="70dp" />
+
+</shape>

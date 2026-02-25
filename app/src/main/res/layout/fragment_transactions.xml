@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/bg_soft"
+    tools:context=".TransactionsFragment">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTransactionsHistoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transactions History"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_text"
+        android:layout_marginBottom="16dp"
+        tools:text="Transactions History" />
+
+    <!-- SwipeRefreshLayout containing RecyclerView, shimmer, and empty state -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Shimmer for loading -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <View
+                        android:layout_width="150dp"
+                        android:layout_height="24dp"
+                        android:background="@color/shimmer_placeholder"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:background="@color/shimmer_placeholder"
+                            android:layout_marginBottom="12dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:background="@color/shimmer_placeholder"
+                            android:layout_marginBottom="12dp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="64dp"
+                            android:background="@color/shimmer_placeholder"
+                            android:layout_marginBottom="12dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- RecyclerView for displaying transactions -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTransactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:paddingBottom="12dp" />
+
+            <!-- Empty state -->
+            <TextView
+                android:id="@+id/tvEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No transactions found."
+                android:textColor="@color/secondary_text"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="24dp"
+                android:padding="8dp"/>
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

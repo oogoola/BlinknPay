@@ -1,0 +1,282 @@
+[debug] [2025-12-10T13:56:32.055Z] ----------------------------------------------------------------------
+[debug] [2025-12-10T13:56:32.062Z] Command:       /Users/macbookair/.nvm/versions/node/v14.21.3/bin/node /Users/macbookair/.nvm/versions/node/v14.21.3/bin/firebase emulators:start --only functions
+[debug] [2025-12-10T13:56:32.062Z] CLI Version:   11.30.0
+[debug] [2025-12-10T13:56:32.063Z] Platform:      darwin
+[debug] [2025-12-10T13:56:32.063Z] Node Version:  v14.21.3
+[debug] [2025-12-10T13:56:32.084Z] Time:          Wed Dec 10 2025 16:56:32 GMT+0300 (East Africa Time)
+[debug] [2025-12-10T13:56:32.085Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-12-10T13:56:32.090Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-12-10T13:56:32.267Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-10T13:56:32.268Z] > authorizing via signed-in user (erickogola4@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2025-12-10T13:56:32.761Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-10T13:56:32.762Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-12-10T13:56:32.774Z] [hub] writing locator at /var/folders/7n/l6sp2wcn1798str_hp_l7trh0000gn/T/hub-myboom-ffef4.json
+[debug] [2025-12-10T13:56:33.180Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-10T13:56:33.200Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-10T13:56:33.200Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage\u001b[22m"}}
+[debug] [2025-12-10T13:56:33.206Z] defaultcredentials: writing to file /Users/macbookair/.config/firebase/erickogola4_gmail_com_application_default_credentials.json
+[debug] [2025-12-10T13:56:33.214Z] Setting GAC to /Users/macbookair/.config/firebase/erickogola4_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/macbookair/.config/firebase/erickogola4_gmail_com_application_default_credentials.json"}}
+[debug] [2025-12-10T13:56:33.216Z] > refreshing access token with scopes: []
+[debug] [2025-12-10T13:56:33.218Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-10T13:56:33.218Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-10T13:56:34.880Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-12-10T13:56:34.880Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2025-12-10T13:56:35.076Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-10T13:56:35.077Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-10T13:56:35.106Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/myboom-ffef4/adminSdkConfig [none]
+[debug] [2025-12-10T13:56:37.383Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/myboom-ffef4/adminSdkConfig 200
+[debug] [2025-12-10T13:56:37.384Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/myboom-ffef4/adminSdkConfig {"projectId":"myboom-ffef4","storageBucket":"myboom-ffef4.firebasestorage.app"}
+[info] i  ui: downloading ui-v1.11.6.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.11.6.zip..."}}
+[debug] [2025-12-10T13:56:37.420Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.6.zip 
+[debug] [2025-12-10T13:56:39.231Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.6.zip 200
+[debug] [2025-12-10T13:56:39.232Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.6.zip [stream]
+[debug] [2025-12-10T14:02:07.972Z] Data is 3063444
+[debug] [2025-12-10T14:02:07.975Z] [unzip] Entry: client/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:07.976Z] [unzip] Processing entry: client/
+[debug] [2025-12-10T14:02:07.976Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/
+[debug] [2025-12-10T14:02:07.977Z] [unzip] Entry: client/favicon.ico (compressed_size=2497 bytes, uncompressed_size=7406 bytes)
+[debug] [2025-12-10T14:02:07.978Z] [unzip] Processing entry: client/favicon.ico
+[debug] [2025-12-10T14:02:07.978Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:07.978Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/favicon.ico
+[debug] [2025-12-10T14:02:07.988Z] [unzip] Entry: client/apple-touch-icon.png (compressed_size=7231 bytes, uncompressed_size=7367 bytes)
+[debug] [2025-12-10T14:02:07.988Z] [unzip] Processing entry: client/apple-touch-icon.png
+[debug] [2025-12-10T14:02:07.988Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:07.989Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/apple-touch-icon.png
+[debug] [2025-12-10T14:02:07.992Z] [unzip] Entry: client/android-chrome-512x512.png (compressed_size=16987 bytes, uncompressed_size=18186 bytes)
+[debug] [2025-12-10T14:02:07.992Z] [unzip] Processing entry: client/android-chrome-512x512.png
+[debug] [2025-12-10T14:02:07.992Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:07.993Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/android-chrome-512x512.png
+[debug] [2025-12-10T14:02:07.994Z] [unzip] Entry: client/assets/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:07.996Z] [unzip] Processing entry: client/assets/
+[debug] [2025-12-10T14:02:07.997Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/
+[debug] [2025-12-10T14:02:07.997Z] [unzip] Entry: client/assets/extensions/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:08.000Z] [unzip] Processing entry: client/assets/extensions/
+[debug] [2025-12-10T14:02:08.000Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/extensions/
+[debug] [2025-12-10T14:02:08.001Z] [unzip] Entry: client/assets/extensions/default-extension.png (compressed_size=1646 bytes, uncompressed_size=1657 bytes)
+[debug] [2025-12-10T14:02:08.001Z] [unzip] Processing entry: client/assets/extensions/default-extension.png
+[debug] [2025-12-10T14:02:08.001Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/extensions
+[debug] [2025-12-10T14:02:08.002Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/extensions/default-extension.png
+[debug] [2025-12-10T14:02:08.004Z] [unzip] Entry: client/assets/index.85584c3f.js (compressed_size=526096 bytes, uncompressed_size=1859818 bytes)
+[debug] [2025-12-10T14:02:08.004Z] [unzip] Processing entry: client/assets/index.85584c3f.js
+[debug] [2025-12-10T14:02:08.004Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets
+[debug] [2025-12-10T14:02:08.005Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/index.85584c3f.js
+[debug] [2025-12-10T14:02:08.028Z] [unzip] Entry: client/assets/provider-icons/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:08.028Z] [unzip] Processing entry: client/assets/provider-icons/
+[debug] [2025-12-10T14:02:08.028Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/
+[debug] [2025-12-10T14:02:08.029Z] [unzip] Entry: client/assets/provider-icons/auth_service_oidc.svg (compressed_size=414 bytes, uncompressed_size=858 bytes)
+[debug] [2025-12-10T14:02:08.029Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2025-12-10T14:02:08.029Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.029Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2025-12-10T14:02:08.032Z] [unzip] Entry: client/assets/provider-icons/auth_service_yahoo.svg (compressed_size=577 bytes, uncompressed_size=1182 bytes)
+[debug] [2025-12-10T14:02:08.032Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2025-12-10T14:02:08.032Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.033Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2025-12-10T14:02:08.037Z] [unzip] Entry: client/assets/provider-icons/auth_service_phone.svg (compressed_size=261 bytes, uncompressed_size=414 bytes)
+[debug] [2025-12-10T14:02:08.037Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_phone.svg
+[debug] [2025-12-10T14:02:08.038Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.038Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_phone.svg
+[debug] [2025-12-10T14:02:08.039Z] [unzip] Entry: client/assets/provider-icons/auth_service_saml.svg (compressed_size=575 bytes, uncompressed_size=1226 bytes)
+[debug] [2025-12-10T14:02:08.040Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_saml.svg
+[debug] [2025-12-10T14:02:08.040Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.040Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_saml.svg
+[debug] [2025-12-10T14:02:08.042Z] [unzip] Entry: client/assets/provider-icons/auth_service_mslive.svg (compressed_size=203 bytes, uncompressed_size=378 bytes)
+[debug] [2025-12-10T14:02:08.042Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2025-12-10T14:02:08.042Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.043Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2025-12-10T14:02:08.044Z] [unzip] Entry: client/assets/provider-icons/auth_service_facebook.svg (compressed_size=289 bytes, uncompressed_size=457 bytes)
+[debug] [2025-12-10T14:02:08.045Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2025-12-10T14:02:08.045Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.045Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2025-12-10T14:02:08.047Z] [unzip] Entry: client/assets/provider-icons/auth_service_play_games.svg (compressed_size=565 bytes, uncompressed_size=1173 bytes)
+[debug] [2025-12-10T14:02:08.047Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2025-12-10T14:02:08.047Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.047Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2025-12-10T14:02:08.049Z] [unzip] Entry: client/assets/provider-icons/auth_service_github.svg (compressed_size=466 bytes, uncompressed_size=838 bytes)
+[debug] [2025-12-10T14:02:08.049Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_github.svg
+[debug] [2025-12-10T14:02:08.049Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.049Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_github.svg
+[debug] [2025-12-10T14:02:08.052Z] [unzip] Entry: client/assets/provider-icons/auth_service_apple.svg (compressed_size=230 bytes, uncompressed_size=334 bytes)
+[debug] [2025-12-10T14:02:08.053Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_apple.svg
+[debug] [2025-12-10T14:02:08.053Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.053Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_apple.svg
+[debug] [2025-12-10T14:02:08.054Z] [unzip] Entry: client/assets/provider-icons/auth_service_google.svg (compressed_size=409 bytes, uncompressed_size=720 bytes)
+[debug] [2025-12-10T14:02:08.054Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_google.svg
+[debug] [2025-12-10T14:02:08.055Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.055Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_google.svg
+[debug] [2025-12-10T14:02:08.056Z] [unzip] Entry: client/assets/provider-icons/auth_service_email.svg (compressed_size=228 bytes, uncompressed_size=326 bytes)
+[debug] [2025-12-10T14:02:08.056Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_email.svg
+[debug] [2025-12-10T14:02:08.056Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.057Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_email.svg
+[debug] [2025-12-10T14:02:08.059Z] [unzip] Entry: client/assets/provider-icons/auth_service_twitter.svg (compressed_size=444 bytes, uncompressed_size=751 bytes)
+[debug] [2025-12-10T14:02:08.059Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2025-12-10T14:02:08.059Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.060Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2025-12-10T14:02:08.061Z] [unzip] Entry: client/assets/provider-icons/auth_service_game_center.svg (compressed_size=991 bytes, uncompressed_size=3921 bytes)
+[debug] [2025-12-10T14:02:08.061Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2025-12-10T14:02:08.061Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons
+[debug] [2025-12-10T14:02:08.061Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2025-12-10T14:02:08.064Z] [unzip] Entry: client/assets/img/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:08.064Z] [unzip] Processing entry: client/assets/img/
+[debug] [2025-12-10T14:02:08.064Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/img/
+[debug] [2025-12-10T14:02:08.064Z] [unzip] Entry: client/assets/img/database.png (compressed_size=29449 bytes, uncompressed_size=29988 bytes)
+[debug] [2025-12-10T14:02:08.065Z] [unzip] Processing entry: client/assets/img/database.png
+[debug] [2025-12-10T14:02:08.065Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/img
+[debug] [2025-12-10T14:02:08.065Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/img/database.png
+[debug] [2025-12-10T14:02:08.067Z] [unzip] Entry: client/assets/index.b9383ce5.css (compressed_size=37605 bytes, uncompressed_size=321268 bytes)
+[debug] [2025-12-10T14:02:08.067Z] [unzip] Processing entry: client/assets/index.b9383ce5.css
+[debug] [2025-12-10T14:02:08.067Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets
+[debug] [2025-12-10T14:02:08.067Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/index.b9383ce5.css
+[debug] [2025-12-10T14:02:08.071Z] [unzip] Entry: client/assets/index.85584c3f.js.map (compressed_size=1778028 bytes, uncompressed_size=7960238 bytes)
+[debug] [2025-12-10T14:02:08.071Z] [unzip] Processing entry: client/assets/index.85584c3f.js.map
+[debug] [2025-12-10T14:02:08.071Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets
+[debug] [2025-12-10T14:02:08.072Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/assets/index.85584c3f.js.map
+[debug] [2025-12-10T14:02:08.154Z] [unzip] Entry: client/safari-pinned-tab.svg (compressed_size=838 bytes, uncompressed_size=1504 bytes)
+[debug] [2025-12-10T14:02:08.154Z] [unzip] Processing entry: client/safari-pinned-tab.svg
+[debug] [2025-12-10T14:02:08.154Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.155Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/safari-pinned-tab.svg
+[debug] [2025-12-10T14:02:08.156Z] [unzip] Entry: client/mstile-150x150.png (compressed_size=5406 bytes, uncompressed_size=5723 bytes)
+[debug] [2025-12-10T14:02:08.156Z] [unzip] Processing entry: client/mstile-150x150.png
+[debug] [2025-12-10T14:02:08.156Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.157Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/mstile-150x150.png
+[debug] [2025-12-10T14:02:08.158Z] [unzip] Entry: client/browserconfig.xml (compressed_size=491 bytes, uncompressed_size=822 bytes)
+[debug] [2025-12-10T14:02:08.158Z] [unzip] Processing entry: client/browserconfig.xml
+[debug] [2025-12-10T14:02:08.158Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.159Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/browserconfig.xml
+[debug] [2025-12-10T14:02:08.161Z] [unzip] Entry: client/robots.txt (compressed_size=26 bytes, uncompressed_size=26 bytes)
+[debug] [2025-12-10T14:02:08.161Z] [unzip] Processing entry: client/robots.txt
+[debug] [2025-12-10T14:02:08.161Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.162Z] [unzip] Writing file: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/robots.txt
+[debug] [2025-12-10T14:02:08.163Z] [unzip] Entry: client/index.html (compressed_size=1363 bytes, uncompressed_size=3064 bytes)
+[debug] [2025-12-10T14:02:08.164Z] [unzip] Processing entry: client/index.html
+[debug] [2025-12-10T14:02:08.164Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.164Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/index.html
+[debug] [2025-12-10T14:02:08.166Z] [unzip] Entry: client/favicon-16x16.png (compressed_size=757 bytes, uncompressed_size=777 bytes)
+[debug] [2025-12-10T14:02:08.166Z] [unzip] Processing entry: client/favicon-16x16.png
+[debug] [2025-12-10T14:02:08.166Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.166Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/favicon-16x16.png
+[debug] [2025-12-10T14:02:08.168Z] [unzip] Entry: client/manifest.json (compressed_size=246 bytes, uncompressed_size=551 bytes)
+[debug] [2025-12-10T14:02:08.168Z] [unzip] Processing entry: client/manifest.json
+[debug] [2025-12-10T14:02:08.168Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.169Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/manifest.json
+[debug] [2025-12-10T14:02:08.170Z] [unzip] Entry: client/favicon-32x32.png (compressed_size=1175 bytes, uncompressed_size=1175 bytes)
+[debug] [2025-12-10T14:02:08.170Z] [unzip] Processing entry: client/favicon-32x32.png
+[debug] [2025-12-10T14:02:08.171Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.172Z] [unzip] Writing file: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/favicon-32x32.png
+[debug] [2025-12-10T14:02:08.173Z] [unzip] Entry: client/android-chrome-192x192.png (compressed_size=7602 bytes, uncompressed_size=7834 bytes)
+[debug] [2025-12-10T14:02:08.173Z] [unzip] Processing entry: client/android-chrome-192x192.png
+[debug] [2025-12-10T14:02:08.173Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client
+[debug] [2025-12-10T14:02:08.174Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/client/android-chrome-192x192.png
+[debug] [2025-12-10T14:02:08.175Z] [unzip] Entry: server/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-10T14:02:08.175Z] [unzip] Processing entry: server/
+[debug] [2025-12-10T14:02:08.175Z] [unzip] mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server/
+[debug] [2025-12-10T14:02:08.176Z] [unzip] Entry: server/server.js (compressed_size=343746 bytes, uncompressed_size=1346374 bytes)
+[debug] [2025-12-10T14:02:08.176Z] [unzip] Processing entry: server/server.js
+[debug] [2025-12-10T14:02:08.176Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server
+[debug] [2025-12-10T14:02:08.176Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server/server.js
+[debug] [2025-12-10T14:02:08.199Z] [unzip] Entry: server/server.js.map (compressed_size=289157 bytes, uncompressed_size=1325651 bytes)
+[debug] [2025-12-10T14:02:08.199Z] [unzip] Processing entry: server/server.js.map
+[debug] [2025-12-10T14:02:08.199Z] [unzip] else mkdir: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server
+[debug] [2025-12-10T14:02:08.199Z] [unzip] deflating: /Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server/server.js.map
+[info] i  ui: Removing outdated emulator files: ui-v1.11.4 {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.11.4"}}
+[info] i  ui: Removing outdated emulator files: ui-v1.11.4.zip {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.11.4.zip"}}
+[debug] [2025-12-10T14:02:08.252Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-12-10T14:02:08.253Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-12-10T14:02:08.253Z] Starting Emulator UI with command {"binary":"node","args":["/Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/macbookair/.cache/firebase/emulators/ui-v1.11.6/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2025-12-10T14:02:08.544Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2025-12-10T14:02:08.545Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "/Users/macbookair/AndroidStudioProjects/BlinknPay/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/macbookair/AndroidStudioProjects/BlinknPay/functions\" for Cloud Functions..."}}
+[debug] [2025-12-10T14:02:08.822Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-12-10T14:02:16.946Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "main": "index.js",
+  "engines": {
+    "node": "14"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "npm run lint && firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.11.6",
+    "axios": "^1.12.2",
+    "firebase-admin": "^11.10.1",
+    "firebase-functions": "^3.24.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.0.0"
+  },
+  "private": true
+}
+[debug] [2025-12-10T14:02:16.946Z] Building nodejs source
+[debug] [2025-12-10T14:02:16.948Z] Failed to find version of module node: reached end of search path /Users/macbookair/AndroidStudioProjects/BlinknPay/functions/node_modules
+[info] ✔  functions: Using node@14 from host. 
+[debug] [2025-12-10T14:02:16.958Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-10T14:02:16.974Z] Found firebase-functions binary at '/Users/macbookair/AndroidStudioProjects/BlinknPay/functions/node_modules/.bin/firebase-functions'
+[debug] [2025-12-10T14:02:17.609Z] Serving at port 8862
+
+[debug] [2025-12-10T14:02:17.857Z] ⚡ Running in emulator mode. Connecting Firestore, Database, Storage to local emulators.
+
+[debug] [2025-12-10T14:02:18.055Z] Got response from /__/functions.yaml {"endpoints":{"verifyMerchant":{"platform":"gcfv1","labels":{},"callableTrigger":{},"entryPoint":"verifyMerchant"},"createMpesaPayment":{"platform":"gcfv1","labels":{},"callableTrigger":{},"entryPoint":"createMpesaPayment"},"resolveMerchant":{"platform":"gcfv1","labels":{},"callableTrigger":{},"entryPoint":"resolveMerchant"},"stkPushCallback":{"platform":"gcfv1","httpsTrigger":{},"entryPoint":"stkPushCallback"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2025-12-10T14:02:18.090Z] shutdown requested via /__/quitquitquit
+
+[info] ✔  functions: Loaded functions definitions from source: verifyMerchant, createMpesaPayment, resolveMerchant, stkPushCallback. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: verifyMerchant, createMpesaPayment, resolveMerchant, stkPushCallback."}}
+[info] ✔  functions[us-central1-verifyMerchant]: http function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/verifyMerchant). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/verifyMerchant)."}}
+[info] ✔  functions[us-central1-createMpesaPayment]: http function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/createMpesaPayment). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/createMpesaPayment)."}}
+[info] ✔  functions[us-central1-resolveMerchant]: http function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/resolveMerchant). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/resolveMerchant)."}}
+[info] ✔  functions[us-central1-stkPushCallback]: http function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/stkPushCallback). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/myboom-ffef4/us-central1/stkPushCallback)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-12-10T18:21:25.160Z] Received signal SIGHUP 1
+[info]  
+[info] i  emulators: Received SIGHUP for the first time. Starting a clean shutdown. 
+[info] i  emulators: Please wait for a clean shutdown or send the SIGHUP signal again to stop right now. 
+[debug] [2025-12-10T18:21:25.577Z] Error: write EIO
+    at afterWriteDispatched (internal/stream_base_commons.js:156:25)
+    at writeGeneric (internal/stream_base_commons.js:147:3)
+    at WriteStream.Socket._writeGeneric (net.js:798:11)
+    at WriteStream.Socket._write (net.js:810:8)
+    at writeOrBuffer (internal/streams/writable.js:358:12)
+    at WriteStream.Writable.write (internal/streams/writable.js:303:10)
+    at Console.log (/Users/macbookair/.nvm/versions/node/v14.21.3/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:79:23)
+    at Console._write (/Users/macbookair/.nvm/versions/node/v14.21.3/lib/node_modules/firebase-tools/node_modules/winston-transport/index.js:103:17)
+    at doWrite (/Users/macbookair/.nvm/versions/node/v14.21.3/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:428:64)
+    at writeOrBuffer (/Users/macbookair/.nvm/versions/node/v14.21.3/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:417:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  ui: Stopping Emulator UI {"metadata":{"emulator":{"name":"ui"},"message":"Stopping Emulator UI"}}
+[warn] ⚠  Emulator UI has exited upon receiving signal: SIGINT 
+[info] i  functions: Stopping Functions Emulator {"metadata":{"emulator":{"name":"functions"},"message":"Stopping Functions Emulator"}}
+[info] i  eventarc: Stopping Eventarc Emulator {"metadata":{"emulator":{"name":"eventarc"},"message":"Stopping Eventarc Emulator"}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[info] i  logging: Stopping Logging Emulator {"metadata":{"emulator":{"name":"logging"},"message":"Stopping Logging Emulator"}}

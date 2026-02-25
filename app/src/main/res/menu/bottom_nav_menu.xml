@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/chamaVaultFragment"
+        android:icon="@drawable/home"
+        android:title="Vault" />
+
+    <item
+        android:id="@+id/receivedFragment"
+        android:icon="@drawable/ic_received"
+        android:title="Received" />
+
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false" />
+
+    <item
+        android:id="@+id/transactionsFragment"
+        android:icon="@drawable/payt"
+        android:title="History" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+</menu>

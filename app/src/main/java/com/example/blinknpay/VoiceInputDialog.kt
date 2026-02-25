@@ -1,4 +1,4 @@
-package com.example.blinkpay
+package com.example.blinknpay
 
 import android.app.Dialog
 import android.content.Context

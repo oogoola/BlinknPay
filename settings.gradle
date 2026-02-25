@@ -1,2 +1,8 @@
-include ':app'
+// Root project name
 rootProject.name = "BlinknPay"
+
+// Include only the app module
+include ':app'
+
+// If you have other modules, add them here:
+// include ':anotherModule'

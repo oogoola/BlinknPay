@@ -1,0 +1,14 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_margin="4dp"
+    android:gravity="center">
+
+    <!-- Background circle -->
+    <View
+        android:id="@+id/pinDot"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/circle_dot"
+        android:visibility="invisible"/>
+</FrameLayout>

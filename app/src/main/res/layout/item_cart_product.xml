@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Product Name -->
+    <TextView
+        android:id="@+id/tvProductName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Product Name"
+        android:textColor="#111111"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:fontFamily="@font/poppins_semibold"/>
+
+    <!-- Quantity -->
+    <TextView
+        android:id="@+id/tvQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="x1"
+        android:textSize="14sp"
+        android:textColor="#111111"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/poppins_regular"/>
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/tvProductPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KSh 0"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#111111"
+        android:fontFamily="@font/poppins_semibold"/>
+</LinearLayout>

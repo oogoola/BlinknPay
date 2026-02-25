@@ -1,159 +1,450 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- 🔢 Amount Input (with Mic Icon Inline) -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/amountInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter amount (KSh)"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxBackgroundMode="outline"
-        app:startIconDrawable="@drawable/ic_money"
-        app:startIconTint="@color/colorAccent"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/mic3"
-
-        app:endIconTint="@color/colorAccent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/amountInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textSize="18sp"
-            android:padding="8dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- 🟢 Mode Toggle Row -->
-
-
-
-
-
-
-    <LinearLayout
-        android:id="@+id/modeRow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp"
-        android:paddingHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/mode_toggle_bg"
-        android:elevation="2dp"
-        android:clipToPadding="false"
-        android:baselineAligned="false">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_store"
-            android:contentDescription="Merchant Icon"
-            app:tint="@color/colorAccent"
-            android:layout_marginEnd="10dp"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuickActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/lime"
+                app:cardBackgroundColor="#F5FFF8">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@id/balanceContainer"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvQuickActionsTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Quick Actions"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="#222" />
+
+                            <TextView
+                                android:id="@+id/tvQuickActionsSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pay faster with one tap"
+                                android:textSize="12sp"
+                                android:textColor="#666" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/balanceContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_glass_pill"
+                            android:paddingHorizontal="14dp"
+                            android:paddingVertical="8dp"
+                            android:elevation="4dp">
+
+                            <TextView
+                                android:id="@+id/tvMainBalance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="KES 0.00"
+                                android:textSize="16sp"
+                                android:fontFamily="sans-serif-medium"
+                                android:letterSpacing="0.02"
+                                android:textColor="#1A1A1A"
+                                android:shadowColor="#4DCCFF00"
+                                android:shadowDx="0"
+                                android:shadowDy="0"
+                                android:shadowRadius="10"
+                                android:layout_marginEnd="10dp"/>
+
+                            <ImageView
+                                android:id="@+id/btnTogglePrivacy"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_eye_sparkle"
+                                android:alpha="0.8"
+                                app:tint="#CCFF00" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <GridLayout
+                        android:id="@+id/gridQuickActions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="4"
+                        android:alignmentMode="alignBounds"
+                        android:useDefaultMargins="true">
+
+                        <LinearLayout
+                            android:id="@+id/btnPay"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="@drawable/bg_circle_action">
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_pay" />
+                            </FrameLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Pay"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lime" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btnSend"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="@drawable/bg_circle_action_gray">
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_sendy" />
+                            </FrameLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Send"
+                                android:textSize="12sp"
+                                android:textColor="#333" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btnWithdraw"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="@drawable/bg_circle_action_gray">
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_withdraws" />
+                            </FrameLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Withdraw"
+                                android:textSize="12sp"
+                                android:textColor="#333" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btnDeposit"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="@drawable/bg_circle_action_gray">
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_deposit" />
+                            </FrameLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="Deposit"
+                                android:textSize="12sp"
+                                android:textColor="#333" />
+                        </LinearLayout>
+                    </GridLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/modeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Merchant Mode"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/modeSubLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Switch between Merchant and Customer"
+                android:text="Choose Payment Method"
+                android:textStyle="bold"
                 android:textSize="13sp"
-                android:textColor="#888888"/>
+                android:textAllCaps="true"
+                android:letterSpacing="0.05"
+                android:textColor="@color/lime"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardMpesa"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="32dp"
+                        app:cardElevation="2dp"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="@color/lime"
+                        app:cardBackgroundColor="#F9F9F9">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_pesa"
+                            android:contentDescription="M-Pesa"/>
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="M-Pesa"
+                        android:textStyle="bold"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardEquity"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="32dp"
+                        app:cardElevation="2dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DDDDDD"
+                        app:cardBackgroundColor="#F9F9F9">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/equity"
+                            android:contentDescription="Equity Bank logo"/>
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Equity"
+                        android:textStyle="bold"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardKCB"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="32dp"
+                        app:cardElevation="2dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DDDDDD"
+                        app:cardBackgroundColor="#F9F9F9">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_kcb"
+                            android:contentDescription="KCB Bank logo"/>
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="KCB"
+                        android:textStyle="bold"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardAirtel"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="32dp"
+                        app:cardElevation="2dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DDDDDD"
+                        app:cardBackgroundColor="#F9F9F9">
+                        <ImageView
+                            android:id="@+id/imgAirtel"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/airtel"
+                            android:scaleType="centerInside"
+                            android:contentDescription="Airtel logo"/>
+                    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvAirtel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Airtel"
+                        android:textStyle="bold"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/currentMerchantText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scanning for nearby merchants..."
+                android:textSize="15sp"
+                android:textColor="@color/chartreuse"
+                android:gravity="center"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/nearbyMerchantsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nearby Merchants"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@color/chartreuse"
+                android:layout_marginTop="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/merchantRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingVertical="12dp"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </LinearLayout>
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/modeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:padding="4dp"
-            app:thumbTint="@color/colorAccent"
-            app:trackTint="@color/light_gray" />
-
-
-
-    </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- 💸 Pay Button -->
-    <Button
-        android:id="@+id/payButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Pay Now"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:enabled="false"
-        android:background="@drawable/rounded_button" />
-
-    <!-- 📡 Current Mode Status -->
-    <TextView
-        android:id="@+id/currentMerchantText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Status: Customer Mode (Scanning for Merchants)"
-        android:textSize="15sp"
-        android:textColor="#000000"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center" />
-
-    <!-- 🏬 Nearby Merchants -->
-    <TextView
-        android:id="@+id/nearbyMerchantsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Nearby Merchants"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@android:color/black" />
-
-    <!-- 🧭 List of Receivers/Merchants -->
-    <ListView
-        android:id="@+id/receiverList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:dividerHeight="8dp"
-        android:divider="@color/light_gray" />
-
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
