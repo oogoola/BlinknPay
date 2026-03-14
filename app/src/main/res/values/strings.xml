@@ -12,4 +12,6 @@
     <!-- res/values/strings.xml -->
     <string name="profile_image_description">Profile image</string>
 
+    <string name="acc_description">BlinknPay Secure Bridge maps your fingerprint to your M-PESA PIN for 1-tap secure payments.</string>
+
 </resources>

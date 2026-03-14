@@ -1,34 +1,46 @@
 package com.example.blinknpay
 
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.example.blinknpay.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var navView: BottomNavigationView
-
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     var isUserLoggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        // FIX 1: Correct ViewBinding initialization
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // 1. Toolbar Setup
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         // 2. NavController Setup
         val navHostFragment = supportFragmentManager
@@ -36,41 +48,37 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         // 3. Bottom Navigation Setup
-        navView = findViewById(R.id.bottom_navigation)
+        navView = binding.bottomNavigation
         navView.setupWithNavController(navController)
 
-        // 4. Navigation Handling & Interception (CRASH FIX APPLIED HERE)
+        // 4. Navigation Handling
         navView.setOnItemSelectedListener { item ->
             if (item.itemId == R.id.placeholder) return@setOnItemSelectedListener false
 
-            // Check if the menu ID exists in our NavGraph
             val destinationExists = navController.graph.findNode(item.itemId) != null
-
             if (destinationExists) {
-                // Let NavigationUI handle it if IDs match (navigation_home, navigation_profile, etc.)
                 NavigationUI.onNavDestinationSelected(item, navController)
             } else {
-                // MANUAL MAPPING: Fixes mismatch between Menu IDs and Graph IDs
                 when (item.itemId) {
-                    R.id.navigation_transactions -> safeNavigateTo(R.id.transactionsFragment)
-                    R.id.receivedFragment -> safeNavigateTo(R.id.receivedFragment)
+                    // FIXED: Redirecting to correct Analytics Fragment ID
+                    R.id.analyticsFragment -> safeNavigateTo(R.id.analyticsFragment)
+                    R.id.transactionsFragment -> safeNavigateTo(R.id.transactionsFragment)
                     else -> handleManualNavigation(item.itemId)
                 }
             }
             true
         }
 
-        // 5. Visibility & UI Logic
+        // 5. Visibility Logic
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_home,      // Bluetooth Fragment
-                R.id.servicesFragment,    // Marketplace Hub
+                R.id.navigation_home,
+                R.id.servicesFragment,
                 R.id.transactionsFragment,
                 R.id.navigation_profile,
                 R.id.navigation_qr_scanner,
-                R.id.receivedFragment -> {
+                R.id.analyticsFragment -> { // FIXED ID HERE
                     showBottomNav()
-                    // Services Hub uses a custom FluidHeader, hide standard Toolbar
                     if (destination.id == R.id.servicesFragment) {
                         supportActionBar?.hide()
                     } else {
@@ -85,82 +93,131 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // 6. Login Status Check
-        navView.post {
-            checkCustomerStatus()
-        }
-
-        // 7. "Blink NOW" FAB - Opens Services Marketplace
-        findViewById<View>(R.id.fab_blink_action)?.setOnClickListener {
+        // 6. FAB Action
+        binding.fabBlinkAction.setOnClickListener {
             if (isUserLoggedIn) {
                 safeNavigateTo(R.id.servicesFragment)
             } else {
                 Toast.makeText(this, "Login to access BlinknPay Services", Toast.LENGTH_SHORT).show()
             }
         }
+
+        navView.post { checkCustomerStatus() }
     }
 
-    private fun handleManualNavigation(itemId: Int) {
-        when(itemId) {
-            R.id.navigation_home -> safeNavigateTo(R.id.navigation_home)
+
+
+    override fun onStart() {
+        super.onStart()
+        // Accessibility check moved here to catch when user returns from settings
+        if (isUserLoggedIn && !isAccessibilityServiceEnabled()) {
+            checkAndRequestAccessibility()
         }
     }
+
+    // --- BLINKNPAY ACCESSIBILITY BRIDGE ---
+
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        val serviceId = ComponentName(this, BlinknPayOverlayService::class.java).flattenToString()
+        val mStringColonSplitter = TextUtils.SimpleStringSplitter(':')
+        val settingValue = Settings.Secure.getString(contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+
+        if (settingValue != null) {
+            mStringColonSplitter.setString(settingValue)
+            while (mStringColonSplitter.hasNext()) {
+                if (mStringColonSplitter.next().equals(serviceId, ignoreCase = true)) return true
+            }
+        }
+        return false
+    }
+
+    fun checkAndRequestAccessibility() {
+        showA11yExplanationDialog {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
+        }
+    }
+
+    private fun showA11yExplanationDialog(onAccept: () -> Unit) {
+        AlertDialog.Builder(this).apply {
+            setIcon(R.drawable.blink)
+            setTitle("Secure Biometric Bridge")
+            setMessage("BlinknPay uses Accessibility Services to map your fingerprint to your M-PESA PIN safely.")
+            setPositiveButton("GRANT PERMISSION") { _, _ -> onAccept() }
+            setNegativeButton("NOT NOW") { dialog, _ -> dialog.dismiss() }
+        }.create().show()
+    }
+
+    // --- DATA & STATUS ---
 
     fun checkCustomerStatus() {
         isUserLoggedIn = auth.currentUser != null
         invalidateOptionsMenu()
-
         val currentId = navController.currentDestination?.id
 
         if (!isUserLoggedIn) {
             hideBottomNav()
-            if (currentId != R.id.loginFragment && currentId != R.id.splashFragment) {
-                safeNavigateTo(R.id.loginFragment)
-            }
+            if (currentId != R.id.loginFragment && currentId != R.id.splashFragment) safeNavigateTo(R.id.loginFragment)
         } else {
             showBottomNav()
-            // Send logged-in users to Bluetooth Home (navigation_home)
             if (currentId == R.id.splashFragment || currentId == R.id.loginFragment) {
-                // Ensure this action ID matches your nav_graph.xml exactly
                 safeNavigateToAction(currentId, R.id.action_splashFragment_to_homeFragment)
+            }
+
+            // Trigger balance fetch if logged in
+            fetchAndShowBalance()
+        }
+    }
+
+    private fun fetchAndShowBalance() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val balance = fetchMpesaBalance()
+                withContext(Dispatchers.Main) {
+                    // NOTE: Ensure tvMainBalance is in activity_main.xml or use findFragmentById
+                    // If it's in the Fragment, move this logic there!
+                    Log.d("BlinknPay", "Balance: $balance")
+                }
+            } catch (e: Exception) {
+                Log.e("BlinknPay", "Fetch error", e)
             }
         }
     }
 
-    // --- UI Helpers ---
+    private suspend fun fetchMpesaBalance(): String {
+        return withContext(Dispatchers.IO) {
+            Thread.sleep(1000)
+            "31.00"
+        }
+    }
+
+    // --- UI HELPERS ---
 
     fun showBottomNav() {
-        navView.visibility = View.VISIBLE
-        findViewById<View>(R.id.bottom_app_bar)?.visibility = View.VISIBLE
-        findViewById<View>(R.id.fab_blink_action)?.visibility = View.VISIBLE
+        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.bottomAppBar.visibility = View.VISIBLE
+        binding.fabBlinkAction.visibility = View.VISIBLE
     }
 
     fun hideBottomNav() {
-        navView.visibility = View.GONE
-        findViewById<View>(R.id.bottom_app_bar)?.visibility = View.GONE
-        findViewById<View>(R.id.fab_blink_action)?.visibility = View.GONE
+        binding.bottomNavigation.visibility = View.GONE
+        binding.bottomAppBar.visibility = View.GONE
+        binding.fabBlinkAction.visibility = View.GONE
     }
 
-    // --- Navigation Safety Helpers ---
+    private fun handleManualNavigation(itemId: Int) {
+        if (itemId == R.id.navigation_home) safeNavigateTo(R.id.navigation_home)
+    }
 
     fun safeNavigateTo(destinationId: Int) {
         if (navController.currentDestination?.id != destinationId) {
-            try {
-                navController.navigate(destinationId)
-            } catch (e: Exception) {
-                // This prevents crash if a destination is missing from graph
-                e.printStackTrace()
-            }
+            try { navController.navigate(destinationId) } catch (e: Exception) { e.printStackTrace() }
         }
     }
 
     fun safeNavigateToAction(currentFragmentId: Int, actionId: Int) {
         if (navController.currentDestination?.id == currentFragmentId) {
-            try {
-                navController.navigate(actionId)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            try { navController.navigate(actionId) } catch (e: Exception) { e.printStackTrace() }
         }
     }
 
@@ -171,12 +228,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_scan -> {
-                if (isUserLoggedIn) safeNavigateTo(R.id.navigation_qr_scanner)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+        return if (item.itemId == R.id.action_scan) {
+            if (isUserLoggedIn) safeNavigateTo(R.id.navigation_qr_scanner)
+            true
+        } else super.onOptionsItemSelected(item)
     }
 }

@@ -35,72 +35,98 @@ class MerchantAdapter(
         val context = holder.itemView.context
 
         // ----------------------------
-        // Set texts
+        // 1. Set Texts & Hierarchy
         // ----------------------------
-        holder.nameText.text = receiver.businessName ?: "Unknown"
-        holder.categoryText.text = receiver.category ?: "Uncategorized"
+        holder.nameText.text = receiver.businessName.ifEmpty { "Unknown Merchant" }
 
+        // Ensure category is uppercase for clean UI, default to General
+        val displayCategory = receiver.category.ifEmpty { "General" }.toUpperCase(Locale.getDefault())
+        holder.categoryText.text = displayCategory
+
+        // Location formatting (Smart rounding)
         holder.locationText.text = when {
-            receiver.distance > 1000 -> {
-                String.format(Locale.getDefault(), "%.2f km away", receiver.distance / 1000)
-            }
-            receiver.distance > 0 -> {
-                String.format(Locale.getDefault(), "%.0f m away", receiver.distance)
-            }
-            else -> "Unknown Location"
+            receiver.distance > 1000 -> String.format(Locale.getDefault(), "%.1f km away", receiver.distance / 1000)
+            receiver.distance > 0 -> String.format(Locale.getDefault(), "%.0f m away", receiver.distance)
+            else -> "Nearby"
         }
 
         // ----------------------------
-        // Set icon (logo image or initials)
+        // 2. Dynamic Icon Logic (Logo > Emoji > Initials)
         // ----------------------------
         when {
+            // Priority 1: Resource ID (Local testing/System merchants)
             receiver.logoResId != null -> {
-                holder.iconText.visibility = View.GONE
-                holder.iconImage.visibility = View.VISIBLE
+                showImage(holder)
                 holder.iconImage.setImageResource(receiver.logoResId)
             }
+
+            // Priority 2: Remote URL (Registered Merchants with branding)
             !receiver.logoUrl.isNullOrEmpty() -> {
-                holder.iconText.visibility = View.GONE
-                holder.iconImage.visibility = View.VISIBLE
+                showImage(holder)
                 Glide.with(context)
                     .load(receiver.logoUrl)
-                    .placeholder(R.drawable.blink) // fallback placeholder
-                    .error(R.drawable.blink)
+                    .placeholder(R.drawable.blink)
                     .circleCrop()
                     .into(holder.iconImage)
             }
+
+            // Priority 3: Smart Category Emoji (Dynamic Lookup)
             else -> {
-                holder.iconImage.visibility = View.GONE
-                holder.iconText.visibility = View.VISIBLE
+                showTextIcon(holder)
 
-                val firstChar = receiver.businessName?.firstOrNull()?.toString()?.toUpperCase() ?: "?"
+                // Map the Firestore category string to a visual emoji
+                val emoji = when (receiver.category.toUpperCase(Locale.getDefault())) {
+                    "FOOD & DRINK", "RESTAURANT" -> "🍔"
+                    "TRANSPORT", "TAXI" -> "🚗"
+                    "AIRTIME", "SAFARICOM" -> "📱"
+                    "UTILITIES", "KPLC" -> "💡"
+                    "SHOPPING", "RETAIL" -> "🛍️"
+                    "HEALTH", "PHARMACY" -> "🏥"
+                    else -> receiver.businessName.take(1).toUpperCase() // Fallback to Initial
+                }
 
-                holder.iconText.text = firstChar.toString()
+                holder.iconText.text = emoji
 
+                // Use a soft background for the emoji icon
                 val bg = GradientDrawable().apply {
                     shape = GradientDrawable.OVAL
-                    setColor(ContextCompat.getColor(context, R.color.maroon))
+                    setColor(ContextCompat.getColor(context, R.color.light_gray_bg)) // Use a neutral color
                 }
                 holder.iconText.background = bg
             }
         }
 
         // ----------------------------
-        // Click listener
+        // 3. Highlight Nearest (UX Polish)
         // ----------------------------
-        holder.itemView.setOnClickListener {
-            onMerchantClick(receiver)
+        // If merchant is within "Blink Range" (< 3m), give the card a subtle glow or border
+        if (receiver.distance in 0.1..3.0) {
+            holder.itemView.alpha = 1.0f
+            // Optional: holder.nameText.setTextColor(ContextCompat.getColor(context, R.color.blink_green))
+        } else {
+            holder.itemView.alpha = 0.85f
         }
+
+        holder.itemView.setOnClickListener { onMerchantClick(receiver) }
+    }
+
+    private fun showImage(holder: MerchantViewHolder) {
+        holder.iconText.visibility = View.GONE
+        holder.iconImage.visibility = View.VISIBLE
+    }
+
+    private fun showTextIcon(holder: MerchantViewHolder) {
+        holder.iconImage.visibility = View.GONE
+        holder.iconText.visibility = View.VISIBLE
     }
 
     override fun getItemCount(): Int = merchants.size
 
-    // ----------------------------
-    // Update merchants safely
-    // ----------------------------
     fun updateMerchants(newMerchants: List<Receiver>) {
         merchants.clear()
-        merchants.addAll(newMerchants.distinctBy { it.id }) // prevent duplicates if Firestore sends duplicates
+        // DistinctBy ensures that even if scanning finds multiple signals for 1 merchant,
+        // they only appear once in the list.
+        merchants.addAll(newMerchants.distinctBy { it.id })
         notifyDataSetChanged()
     }
 }

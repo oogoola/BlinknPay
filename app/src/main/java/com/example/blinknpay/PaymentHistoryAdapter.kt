@@ -1,12 +1,12 @@
 package com.example.blinknpay
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.blinknpay.databinding.ItemPaymentHistoryBinding
-import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class PaymentHistoryAdapter(
@@ -20,19 +20,18 @@ class PaymentHistoryAdapter(
         fun bind(payment: Payment) {
             val ctx = binding.root.context
 
-            // 1. IMPROVED LOGIC: Determine if Sent or Received
-            // Checks if sender is the current User ID OR if the SMS manager labeled it "Sent Payment"
-            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-            val isSent = payment.sender == currentUserId ||
-                    payment.sender?.contains("Sent", ignoreCase = true) == true ||
-                    payment.sender?.contains("To:", ignoreCase = true) == true
+            // 1. DIRECTION LOGIC: No more guessing or unresolved references
+            val isSent = payment.direction == "SENT"
 
-            // 2. UI Display: Use the helper functions from your Payment model
-            binding.txtReceiver.text = payment.sender ?: "Unknown Transaction"
+            // 2. TEXT DISPLAY: Using new model field names
+            binding.txtReceiver.text = payment.externalPartyName
             binding.txtAmount.text = payment.formattedAmount()
             binding.txtTimestamp.text = payment.formattedTime()
 
-            // 3. Status Styling (Red for Outgoing, Green for Incoming)
+            // Set the amount color based on the model's helper
+            binding.txtAmount.setTextColor(Color.parseColor(payment.getDirectionColor()))
+
+            // 3. STATUS STYLING (Red for Outgoing, Green for Incoming)
             if (isSent) {
                 binding.txtType.text = "Sent"
                 binding.txtType.setBackgroundResource(R.drawable.bg_status_tag)
@@ -47,17 +46,18 @@ class PaymentHistoryAdapter(
                 binding.imgStatus.setColorFilter(ContextCompat.getColor(ctx, R.color.green))
             }
 
-            // 4. M-Pesa / Airtel Logo Logic
-            // If it's a telco transaction, we can show a specific icon instead of a profile placeholder
-            val profileImage = when (payment.type) {
-                "MPESA" -> R.drawable.ic_mpesa // Ensure you have these in res/drawable
+            // 4. RAIL LOGIC: Show M-Pesa or Airtel logos
+            val placeholderIcon = when (payment.rail.toUpperCase()) {
+                "MPESA" -> R.drawable.ic_mpesa
                 "AIRTEL" -> R.drawable.airtel
+                "KCB" -> R.drawable.ic_kcb // If you have these assets
                 else -> R.drawable.ic_profile_placeholder
             }
 
+            // Note: senderProfile was removed from the new model for simplicity in SMS parsing
+            // We use the rail-specific icon as the primary visual
             Glide.with(ctx)
-                .load(payment.senderProfile.ifEmpty { null })
-                .placeholder(profileImage)
+                .load(placeholderIcon) // Directly load the brand icon
                 .circleCrop()
                 .into(binding.imgProfile)
 

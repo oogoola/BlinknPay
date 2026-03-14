@@ -50,6 +50,26 @@ function generatePassword(shortcode, passkey, timestamp) {
   return Buffer.from(shortcode + passkey + timestamp).toString("base64");
 }
 
+
+
+
+function normalizePhone(phone) {
+  phone = phone.replace(/\s+/g, "");
+
+  if (phone.startsWith("+254")) {
+    return phone.substring(1);
+  }
+
+  if (phone.startsWith("07")) {
+    return "254" + phone.substring(1);
+  }
+
+  return phone;
+}
+
+
+
+
 async function getOAuthToken() {
   const url = `${SAFARICOM_BASE}/oauth/v1/generate?grant_type=client_credentials`;
   const resp = await axios.get(url, {
@@ -103,67 +123,124 @@ exports.verifyMerchant = functions.https.onCall(async (data, context) => {
 
 // ===== createMpesaPayment (callable) =====
 exports.createMpesaPayment = functions.https.onCall(async (data, context) => {
-  const { merchantId, amount, phone } = data || {};
-  if (!merchantId || !amount || !phone) throw new functions.https.HttpsError("invalid-argument", "Missing params");
 
+  const { merchantId, amount, phone } = data || {};
+
+  // ----- Validate input -----
+  if (!merchantId || !amount || !phone) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "merchantId, amount and phone are required"
+    );
+  }
+
+  const normalizedPhone = normalizePhone(phone);
+
+  // ----- Get merchant -----
   const mDoc = await db.collection("merchants").doc(merchantId).get();
-  if (!mDoc.exists) throw new functions.https.HttpsError("not-found", "Merchant not found");
+
+  if (!mDoc.exists) {
+    throw new functions.https.HttpsError("not-found", "Merchant not found");
+  }
 
   const merchant = mDoc.data();
 
-  const pRef = await db.collection("payments").add({
-    merchantId,
-    amount,
-    phone,
-    status: "PENDING",
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
+  if (!merchant.payment || !merchant.payment.shortcode || !merchant.payment.passKey) {
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "Merchant payment configuration missing"
+    );
+  }
+
+  // ----- Create payment record -----
+// ----- Create payment record -----
+
+const localTime = new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" });
+
+const pRef = await db.collection("payments").add({
+  merchantId,
+  merchantName: merchant.displayName,
+  amount,
+  phone: normalizedPhone,
+  status: "PENDING",
+  createdAt: admin.firestore.FieldValue.serverTimestamp(), // UTC
+  createdLocalTime: localTime, // ✅ store human-readable Nairobi time
+});
+
+
+
+
   const paymentId = pRef.id;
 
+  // ----- Generate STK password -----
   const shortcode = merchant.payment.shortcode;
   const passkey = merchant.payment.passKey;
   const timestamp = getTimestamp();
   const password = generatePassword(shortcode, passkey, timestamp);
 
+  // ----- Get OAuth token -----
   const token = await getOAuthToken();
 
+  // ----- STK Push request body -----
   const body = {
     BusinessShortCode: shortcode,
     Password: password,
     Timestamp: timestamp,
     TransactionType: "CustomerPayBillOnline",
     Amount: Math.round(amount),
-    PartyA: phone,
+    PartyA: normalizedPhone,
     PartyB: shortcode,
-    PhoneNumber: phone,
-
-CallBackURL: "https://us-central1-myboom-ffef4.cloudfunctions.net/stkPushCallback",
-
-    AccountReference: merchant.displayName,
-    TransactionDesc: `Payment to ${merchant.displayName} (paymentId=${paymentId})`,
-
-
+    PhoneNumber: normalizedPhone,
+    CallBackURL: "https://us-central1-myboom-ffef4.cloudfunctions.net/stkPushCallback",
+    AccountReference: paymentId,
+    TransactionDesc: `Payment to ${merchant.displayName}`
   };
 
   try {
-    const resp = await axios.post(`${SAFARICOM_BASE}/mpesa/stkpush/v1/processrequest`, body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
 
-    await pRef.update({ mpesa: resp.data, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
+    const resp = await axios.post(
+      `${SAFARICOM_BASE}/mpesa/stkpush/v1/processrequest`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
-    return { success: true, paymentId, mpesaResponse: resp.data };
-  } catch (err) {
+    const mpesaResponse = resp.data;
+
+    // ----- Save STK request info -----
     await pRef.update({
-      status: "FAILED",
-      mpesaError: err.toString(),
+      mpesa: mpesaResponse,
+      checkoutRequestId: mpesaResponse.CheckoutRequestID || null,
+      merchantRequestId: mpesaResponse.MerchantRequestID || null,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
-    throw new functions.https.HttpsError("internal", "Failed to initiate STK Push");
+
+    return {
+      success: true,
+      paymentId,
+      mpesaResponse
+    };
+
+  } catch (err) {
+
+    console.error("STK Push Error:", err.response?.data || err.message);
+
+    await pRef.update({
+      status: "FAILED",
+      mpesaError: err.response?.data || err.toString(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    throw new functions.https.HttpsError(
+      "internal",
+      "Failed to initiate STK Push"
+    );
   }
+
 });
-
-
 
 
 
@@ -197,47 +274,63 @@ exports.resolveMerchant = functions.https.onCall(async (data, context) => {
 
 
 exports.stkPushCallback = functions.https.onRequest(async (req, res) => {
-    const payload = req.body;
+  try {
 
-    if (!payload.Body.stkCallback) {
-        return res.status(400).send("Invalid callback");
-    }
+    const callback = req.body.Body.stkCallback;
 
-    const callback = payload.Body.stkCallback;
+    const checkoutRequestId = callback.CheckoutRequestID;
     const resultCode = callback.ResultCode;
 
-    // Extract userId from AccountReference
-    const accountRef = callback.AccountReference || "";  // "user:12345"
-    const userId = accountRef.replace("user:", "");
+    // Find payment using CheckoutRequestID
+    const snapshot = await db.collection("payments")
+      .where("checkoutRequestId", "==", checkoutRequestId)
+      .limit(1)
+      .get();
 
-    const amount = callback.CallbackMetadata?.Item?.find(i => i.Name === "Amount")?.Value || 0;
-
-    if (!userId) {
-        console.error("Missing userId in callback");
-        return res.status(400).send("No userId encoded");
+    if (snapshot.empty) {
+      console.error("Payment not found for:", checkoutRequestId);
+      return res.status(200).send("OK");
     }
 
-    if (resultCode === 0) {
-        await db.collection("users")
-          .doc(userId)
-          .collection("transactions")
-          .add({
-              amount,
-              status: "SUCCESS",
-              timestamp: admin.firestore.FieldValue.serverTimestamp()
-          });
-    } else {
-        await db.collection("users")
-          .doc(userId)
-          .collection("transactions")
-          .add({
-              amount,
-              status: "FAILED",
-              timestamp: admin.firestore.FieldValue.serverTimestamp()
-          });
+    const paymentDoc = snapshot.docs[0];
+    const paymentRef = paymentDoc.ref;
+
+    let amount = 0;
+
+    if (callback.CallbackMetadata) {
+      const items = callback.CallbackMetadata.Item;
+      const amountItem = items.find(i => i.Name === "Amount");
+      amount = amountItem?.Value || 0;
     }
 
-    res.status(200).send("Callback received");
+
+if (resultCode === 0) {
+
+  await paymentRef.update({
+    status: "SUCCESS",
+    amount,
+    callback: callback,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    completedLocalTime: new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" }) // local Nairobi time
+  });
+
+} else {
+  await paymentRef.update({
+    status: "FAILED",
+    callback: callback,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    completedLocalTime: new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" }) // optional
+  });
+}
+
+    res.status(200).send("OK");
+
+  } catch (error) {
+
+    console.error("Callback error:", error);
+    res.status(200).send("OK");
+
+  }
 });
 
 

@@ -1,5 +1,6 @@
 package com.example.blinknpay
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -11,7 +12,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import com.google.android.material.card.MaterialCardView
 
 class TransactionAdapter(
-    private var transactions: List<Payment>, // Changed to Payment
+    private var transactions: List<Payment>,
     private val onItemClick: (Payment) -> Unit
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
@@ -24,7 +25,6 @@ class TransactionAdapter(
         val cardTransaction: MaterialCardView = itemView.findViewById(R.id.cardTransaction)
 
         init {
-            // Scale animation on touch for that premium feel
             cardTransaction.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -54,23 +54,34 @@ class TransactionAdapter(
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val pmt = transactions[position]
+        val context = holder.itemView.context
 
-        // Load sender profile image
-        Glide.with(holder.itemView.context)
-            .load(pmt.senderProfile)
+        // 1. BRAND LOGO LOGIC: Show M-Pesa/Airtel/KCB icons instead of empty profiles
+        val brandIcon = when (pmt.rail.toUpperCase()) {
+            "MPESA" -> R.drawable.ic_mpesa
+            "AIRTEL" -> R.drawable.airtel
+            "KCB" -> R.drawable.ic_kcb
+            else -> R.drawable.ic_profile_placeholder
+        }
+
+        Glide.with(context)
+            .load(brandIcon)
             .placeholder(R.drawable.ic_profile_placeholder)
             .into(holder.senderProfileImage)
 
-        // Updated to match your Payment.kt fields
-        holder.receivedFrom.text = pmt.sender
+        // 2. UPDATED FIELDS: Fixed 'Unresolved reference' errors
+        holder.receivedFrom.text = pmt.externalPartyName // Replaces .sender
         holder.receivedAmount.text = pmt.formattedAmount()
         holder.receivedTime.text = pmt.formattedTime()
         holder.transactionId.text = "Ref: ${pmt.transactionRef}"
+
+        // 3. DIRECTIONAL STYLING: Green for Income, Pink/Red for Expense
+        val statusColor = Color.parseColor(pmt.getDirectionColor())
+        holder.receivedAmount.setTextColor(statusColor)
     }
 
     override fun getItemCount(): Int = transactions.size
 
-    // Crucial for the SwipeRefreshLayout update
     fun updateData(newList: List<Payment>) {
         this.transactions = newList
         notifyDataSetChanged()

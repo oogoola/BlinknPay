@@ -15,7 +15,6 @@ class SmsSyncManager(private val context: Context) {
         val seenIds = mutableSetOf<String>()
         val uri = Uri.parse("content://sms/inbox")
 
-        // Querying for common East African Telco headers
         val cursor = context.contentResolver.query(
             uri,
             arrayOf("body", "date", "address"),
@@ -32,10 +31,7 @@ class SmsSyncManager(private val context: Context) {
                 val body = it.getString(bodyIdx) ?: ""
                 val date = it.getLong(dateIdx)
 
-                // --- 1. M-PESA REGEX (Standard 10-char, Global, and Sandbox) ---
                 val mpesaPattern = Pattern.compile("([A-Z0-9]{8,12}).*?(?:Ksh|Ksh\\s)([\\d,]+\\.\\d{2})")
-
-                // --- 2. AIRTEL REGEX ---
                 val airtelPattern = Pattern.compile("(?:ID:|Txn ID:)\\s?([A-Z0-9]+).*?(?:Amt:|Ksh)\\s?([\\d,]+\\.\\d{2})")
 
                 val mpesaMatcher = mpesaPattern.matcher(body)
@@ -66,54 +62,46 @@ class SmsSyncManager(private val context: Context) {
         return transactionList
     }
 
-    /**
-     * Uploads the latest transactions to Firestore to keep UI in sync across devices.
-     */
-    fun syncTransactionsToCloud(payments: List<Payment>) {
-        if (payments.isEmpty()) return
-
-        val batch = db.batch()
-        // Sync only the most recent 15 to stay within batch limits and keep it fast
-        payments.take(15).forEach { payment ->
-            val docRef = db.collection("transactions").document(payment.id)
-            batch.set(docRef, payment)
-        }
-
-        batch.commit()
-            .addOnSuccessListener { Log.d("BlinknPay_SmsSync", "✅ Successfully synced to Firestore") }
-            .addOnFailureListener { e -> Log.e("BlinknPay_SmsSync", "❌ Cloud sync failed: ${e.message}") }
-    }
-
-    private fun createPayment(id: String, body: String, amt: Double, date: Long, type: String): Payment {
-        val isSandbox = body.contains("Test_Paybill", ignoreCase = true) || body.contains("Sandbox", ignoreCase = true)
+    private fun createPayment(id: String, body: String, amt: Double, date: Long, rail: String): Payment {
+        val upperBody = body.uppercase()
         val recipient = extractRecipient(body)
 
-        // Set the primary "Sender" label for the UI list
-        val displayLabel = when {
-            body.contains("paid to", ignoreCase = true) -> if (isSandbox) "Sandbox: $recipient" else recipient
-            body.contains("received", ignoreCase = true) -> "Funds from $recipient"
-            else -> "$type: $recipient"
+        // Determine Direction
+        val direction = if (upperBody.contains("RECEIVED") || upperBody.contains("DEPOSIT")) {
+            "RECEIVED"
+        } else {
+            "SENT"
         }
 
+        // Determine Category
+        val category = when {
+            upperBody.contains("PAY BILL") || upperBody.contains("PAID TO") -> "PAYBILL"
+            upperBody.contains("AIRTIME") -> "AIRTIME"
+            upperBody.contains("POCHI") -> "POCHI"
+            else -> "P2P"
+        }
+
+        // 🛡️ FIX: Use new Payment constructor parameters
         return Payment(
             id = id,
-            sender = displayLabel,
-            amount = amt,
-            timestamp = date,
             transactionRef = id,
-            type = type,
-            recipientName = recipient
+            amount = amt,
+            direction = direction,
+            category = category,
+            externalPartyName = recipient,
+            rail = rail,
+            timestamp = date
         )
     }
 
     private fun extractRecipient(body: String): String {
-        // Improved pattern to capture business names or people
-        val pattern = Pattern.compile("(?:to|from)\\s+([A-Z\\s]{3,25})(?:on|at|\\.|\\d{2}/|\\s\\d{10})")
+        // Matches names after "to", "from", or "paid to" until "on" or date patterns
+        val pattern = Pattern.compile("(?:to|from|paid to)\\s+([A-Z0-9\\s]{3,30})(?:on|at|\\.|\\d{2}/)", Pattern.CASE_INSENSITIVE)
         val matcher = pattern.matcher(body)
         return if (matcher.find()) {
-            matcher.group(1)?.trim() ?: "BlinknPay User"
+            matcher.group(1)?.trim()?.replace(Regex("\\s+"), " ") ?: "Unknown Party"
         } else {
-            "Internal Transaction"
+            "M-Pesa Transaction"
         }
     }
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E60A0A0A">
+
+    <LinearLayout
+        android:id="@+id/merchantCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/glass_card_bg"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAY TO MERCHANT"
+            android:textColor="#88FFFFFF"
+            android:textSize="12sp"
+            android:letterSpacing="0.1" />
+
+        <TextView
+            android:id="@+id/merchantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Equity Bank (07xxxxxxx)"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/amountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="KES 1,500.00"
+            android:textColor="#00F2FE"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true">
+
+        <View
+            android:id="@+id/ring1"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:background="@drawable/pulsating_ring" />
+
+        <ImageView
+            android:id="@+id/blinknpayLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/blink"
+            android:elevation="10dp" />
+
+        <ImageView
+            android:id="@+id/successCheckmark"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check_circle"
+            android:visibility="gone"
+            app:tint="#00E676"
+            android:elevation="15dp" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/blink_auth_fingerprint"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_fingerprint3"
+            app:tint="#00F2FE"
+            tools:ignore="UnknownAttribute" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Confirm with Fingerprint"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>

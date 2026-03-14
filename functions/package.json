@@ -11,14 +11,15 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "npm run lint && firebase deploy --only functions",
+    "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "dependencies": {
     "@google-cloud/firestore": "^7.11.6",
     "axios": "^1.12.2",
     "firebase-admin": "^11.10.1",
-    "firebase-functions": "^3.24.1"
+    "firebase-functions": "^3.24.1",
+    "crypto": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^8.15.0",

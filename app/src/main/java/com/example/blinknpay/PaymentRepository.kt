@@ -11,12 +11,10 @@ class PaymentRepository(private val fragment: Fragment) {
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
-    // Needed to fetch data if the list isn't passed directly
     private val smsSyncManager = SmsSyncManager(fragment.requireContext())
 
     /**
      * SYNC: Uploads a list of SMS-based transactions to the cloud.
-     * Logic: If smsPayments is null, it fetches them locally first.
      */
     fun syncSmsToCloud(smsPayments: List<Payment>? = null, onComplete: (Boolean) -> Unit) {
         val uid = auth.currentUser?.uid ?: run {
@@ -25,7 +23,6 @@ class PaymentRepository(private val fragment: Fragment) {
             return
         }
 
-        // Use provided list OR fetch fresh ones if null
         val transactionsToSync = smsPayments ?: smsSyncManager.fetchLocalTransactions()
 
         if (transactionsToSync.isEmpty()) {
@@ -34,18 +31,21 @@ class PaymentRepository(private val fragment: Fragment) {
             return
         }
 
-        // --- SAFEGUARD: Samsung A15 / Low-end device optimization ---
-        // Batch limit is 500; we use 100 for memory stability during the quad-channel scan
+        // Optimization for device stability
         val syncLimit = 100
         val safePayments = if (transactionsToSync.size > syncLimit) transactionsToSync.take(syncLimit) else transactionsToSync
-
-        Log.d("BlinknPay_Firebase", "SYNC_START: Processing batch for ${safePayments.size} items.")
 
         val batch = db.batch()
         val userPaymentsRef = db.collection("users").document(uid).collection("payments")
 
         for (payment in safePayments) {
-            // Use M-Pesa/Airtel receipt code as doc ID to prevent duplicates
+            // Ensure the senderId/receiverId is set correctly before syncing
+            if (payment.direction == "SENT") {
+                payment.senderId = uid
+            } else {
+                payment.receiverId = uid
+            }
+
             val docRef = userPaymentsRef.document(payment.id)
             batch.set(docRef, payment, SetOptions.merge())
         }
@@ -63,13 +63,15 @@ class PaymentRepository(private val fragment: Fragment) {
 
     /**
      * SINGLE SAVE: Used for STK Push results or RPID proximity trades.
+     * Updated to match the new Payment model fields.
      */
     fun savePaymentToFirestore(
         merchantName: String,
-        merchantLogo: String?,
         amount: Double,
         transactionRef: String,
-        type: String = "BLINKNPAY",
+        rail: String = "BLINKNPAY", // Replaces 'type'
+        direction: String = "SENT", // Default for STK/Merchant payments
+        category: String = "GENERAL",
         onComplete: (() -> Unit)? = null
     ) {
         val uid = auth.currentUser?.uid ?: run {
@@ -81,14 +83,18 @@ class PaymentRepository(private val fragment: Fragment) {
         val finalId = transactionRef.ifEmpty { db.collection("users").document().id }
         val docRef = db.collection("users").document(uid).collection("payments").document(finalId)
 
+        // Using the updated Payment model constructor
         val payment = Payment(
             id = finalId,
-            sender = merchantName,
-            senderProfile = merchantLogo ?: "",
-            amount = amount,
-            timestamp = System.currentTimeMillis(),
             transactionRef = transactionRef,
-            type = type
+            amount = amount,
+            direction = direction,
+            category = category,
+            externalPartyName = merchantName,
+            senderId = if (direction == "SENT") uid else "",
+            receiverId = if (direction == "RECEIVED") uid else "",
+            rail = rail,
+            timestamp = System.currentTimeMillis()
         )
 
         docRef.set(payment, SetOptions.merge())
@@ -98,7 +104,6 @@ class PaymentRepository(private val fragment: Fragment) {
             }
             .addOnFailureListener { e ->
                 Log.e("BlinknPay_Firebase", "SAVE_ERROR: ${e.message}")
-                // Safeguard against fragment detachment
                 if (fragment.isAdded && fragment.context != null) {
                     Toast.makeText(fragment.requireContext(), "Save failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 }

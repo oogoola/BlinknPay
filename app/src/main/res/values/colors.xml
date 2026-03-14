@@ -149,5 +149,30 @@
     <color name="shimmer_placeholder">#E0E0E0</color>
 
 
+    <color name="primary_blink">#6CAF10</color>
+    <color name="primary_dark_blink">#4A7A0B</color>
+    <color name="accent_blink">#8BC34A</color>
+
+    <color name="income_green">#2E7D32</color>
+    <color name="expense_pink">#E91E63</color>
+    <color name="mpesa_red">#ED1C24</color>
+    <color name="airtel_red">#FF0000</color>
+
+
+    <color name="bg_card">#FFFFFF</color>
+
+
+
+    <color name="shimmer_base">#E0E0E0</color>
+    <color name="shimmer_highlight">#F5F5F5</color>
+
+    <color name="light_gray_bg">#F5F5F7</color>
+
+    <color name="light_gray_border">#E0E0E0</color>
+
+
+
+
+
 
 </resources>

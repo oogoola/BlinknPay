@@ -55,8 +55,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.example.blinknpay.ui.merchant.MerchantSwipeCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.blinknpay.databinding.DialogPaymentBinding
-import com.blinknpay.viewmodel.PaymentViewModel
-
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import android.graphics.Color
 import android.telephony.SubscriptionManager
 
@@ -72,6 +72,7 @@ import java.io.IOException
 import android.widget.TextView
 
 import androidx.navigation.fragment.NavHostFragment
+import okhttp3.MediaType.Companion.toMediaType
 
 
 class BluetoothFragment : Fragment(){
@@ -181,6 +182,8 @@ class BluetoothFragment : Fragment(){
 
         const val CONSUMER_KEY = "4V1w6zy7LeQDGy3JiFGyfPUP30jG9rmVkH9CGhAuEudZk4Re"
         const val CONSUMER_SECRET = "5q8P3hoxt6VG1mHgTccAR9ONUvs1dp95phnWdZH2xJhZl7K6ZRsEzdFz8EYcuwE4"
+
+
     }
 
 
@@ -246,36 +249,6 @@ class BluetoothFragment : Fragment(){
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Extension property to map merchant codes (e.g., "SRN", "NVS") to readable names
     // Instead of mapping codes, rely on the data
     val String.businessName: String
@@ -333,14 +306,6 @@ class BluetoothFragment : Fragment(){
         var lastSeen: Long
     )
 
-
-
-
-
-
-
-
-
     // 2. PASTE THE LAUNCHER HERE (Class level)
     private val requestSmsPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -351,10 +316,6 @@ class BluetoothFragment : Fragment(){
             Toast.makeText(requireContext(), "SMS permission denied. Balance hidden.", Toast.LENGTH_LONG).show()
         }
     }
-
-
-
-
 
 
     override fun onCreateView(
@@ -487,21 +448,6 @@ class BluetoothFragment : Fragment(){
                 viewModel.togglePrivacy()
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // -------------------------
         // 1. Bluetooth & Permissions Setup
@@ -665,30 +611,28 @@ class BluetoothFragment : Fragment(){
             // Update your TextView/UI here
             // balanceTextView.text = "KES ${String.format("%.2f", newBalance)}"
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // -------------------------
         // 7. Initialize Engine & Data
         // -------------------------
+        viewModel.currentCategory.observe(viewLifecycleOwner) { category ->
+            // Update your "Top Spending Categories" list based on this new transaction
+            refreshTopSpendingList()
+        }
+
+
+
+
+
+
+
+
+
         checkPermissionsAndInitBluetooth()
         startNearestMerchantWatcher()
         testFirestoreConnection()
         checkBluetoothReady()
         checkSmsPermission()
+
 
     }
 
@@ -696,6 +640,36 @@ class BluetoothFragment : Fragment(){
 
 
 
+
+    private fun refreshTopSpendingList() {
+        val container = view?.findViewById<LinearLayout>(R.id.categoryContainer) ?: return
+
+        // 1. Clear existing rows to prevent duplicates
+        container.removeAllViews()
+
+        // 2. Map of Emojis (Move this to a constant later if you prefer)
+        val emojiMap = mapOf(
+            "FOOD & DRINK" to "🍔",
+            "TRANSPORT" to "🚗",
+            "AIRTIME" to "📱",
+            "UTILITIES" to "💡",
+            "SHOPPING" to "🛍️"
+        )
+
+        // 3. Logic: For now, we show the "Latest" category as a quick test
+        // In a full build, you'd pull the top 3 from your PaymentRepository
+        val currentCat = viewModel.currentCategory.value ?: "GENERAL"
+        val emoji = emojiMap[currentCat.toUpperCase()] ?: "💰"
+
+        // 4. Inflate the row (Make sure you have an item_category_row.xml)
+        val rowView = layoutInflater.inflate(R.layout.item_category_row, container, false)
+
+        rowView.findViewById<TextView>(R.id.tvCategoryEmoji).text = emoji
+        rowView.findViewById<TextView>(R.id.tvCategoryName).text = currentCat
+        rowView.findViewById<TextView>(R.id.tvCategoryTotal).text = "Updated Just Now"
+
+        container.addView(rowView)
+    }
 
 
 
@@ -758,33 +732,36 @@ class BluetoothFragment : Fragment(){
 
 
 
-
     private fun updateBalanceUI(tvBalance: TextView?, btnToggle: ImageView?) {
-        // 1. Get current state from ViewModel
-        val isHidden = viewModel.isPrivacyActive.value ?: false
+        // 1. 🛡️ SECURITY FIRST: Default to 'true' (Hidden) if the state is null
+        val isHidden = viewModel.isPrivacyActive.value ?: true
         val balance = viewModel.balance.value ?: 0.0
 
         if (isHidden) {
-            // Privacy Mode: Hide balance with dots
+            // 🔒 PRIVACY MODE: Always block balance until opened
             tvBalance?.text = "KES • • • •"
 
-            // Visual feedback for 'Locked' state: semi-transparent icon
-            btnToggle?.setImageResource(R.drawable.ic_eye_sparkle)
-            btnToggle?.alpha = 0.4f
+            // Use the 'Off' version of your icon to indicate a locked state
+            // Replace 'ic_eye_off' with your actual resource name for a closed eye
+            btnToggle?.setImageResource(R.drawable.ic_eye_off)
+            btnToggle?.alpha = 0.5f // Dimmed to show it is 'inactive'
+
+            // 🛡️ Performance: Remove the shimmer shader so it doesn't run behind the dots
+            tvBalance?.paint?.shader = null
+            tvBalance?.invalidate()
         } else {
-            // Active Mode: Show formatted balance
+            // 🔓 OPEN MODE: Show formatted balance
             val formattedBalance = String.format("%,.2f", balance)
             tvBalance?.text = "KES $formattedBalance"
 
-            // Reset icon to full brightness
+            // Use the 'Sparkle' or 'Open' version of the icon
             btnToggle?.setImageResource(R.drawable.ic_eye_sparkle)
-            btnToggle?.alpha = 1.0f
+            btnToggle?.alpha = 1.0f // Full brightness indicates 'Active'
 
-            // Trigger Shimmer only when showing the real numbers
+            // ✨ Trigger the Magical Shimmer only when the numbers are visible
             tvBalance?.let { applyShimmerEffect(it) }
         }
     }
-
 
 
 
@@ -1055,17 +1032,33 @@ class BluetoothFragment : Fragment(){
 
 
 
-
-
-    private fun openReceivedFragment(amount: String, merchantName: String, timestamp: String) {
+    private fun openAnalyticsFragment(amount: String, merchantName: String, timestamp: String) {
+        // 1. We keep the bundle in case you want to highlight a specific transaction,
+        // but we update the ID to match your new nav_graph.xml
         val bundle = Bundle().apply {
             putString("amount", amount)
             putString("merchantName", merchantName)
             putString("timestamp", timestamp)
+            putString("mode", "WEEKLY") // Added for the new Analytics logic
         }
 
-        findNavController().navigate(R.id.receivedFragment, bundle)
+        // 2. Change R.id.receivedFragment to R.id.analyticsFragment
+        // This fixes the "Unresolved reference: receivedFragment" error
+        try {
+            findNavController().navigate(R.id.analyticsFragment, bundle)
+        } catch (e: Exception) {
+            Log.e("BlinknPay_Nav", "Navigation failed: ${e.message}")
+            // Fallback: If you are using parentFragmentManager instead of NavController:
+            /*
+            val fragment = AnalyticsFragment().apply { arguments = bundle }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack(null)
+                .commit()
+            */
+        }
     }
+
 
 
 
@@ -1094,26 +1087,30 @@ class BluetoothFragment : Fragment(){
                         id = doc.id
                     } ?: return@addOnSuccessListener
 
-                    // 1. Use MainActivity's helper to switch tabs safely
-                    mainActivity?.safeNavigateTo(R.id.navigation_transactions)
+                    // 1. Switch to the Analytics tab (Renamed from receivedFragment)
+                    // Ensure R.id.analyticsFragment matches your nav_graph.xml ID
+                    mainActivity?.safeNavigateTo(R.id.analyticsFragment)
 
                     // 2. Use the activity's navView for the delay to ensure UI thread alignment
                     mainActivity?.navView?.postDelayed({
-                        // Find the ReceivedFragment inside the NavHost
+                        // Find the NavHostFragment
                         val navHostFragment = mainActivity.supportFragmentManager
                             .findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
 
+                        // Look for AnalyticsFragment (Updated from ReceivedFragment)
                         val currentFragment = navHostFragment?.childFragmentManager?.fragments
-                            ?.firstOrNull { it is ReceivedFragment } as? ReceivedFragment
+                            ?.firstOrNull { it is AnalyticsFragment } as? AnalyticsFragment
 
                         currentFragment?.let {
-                            it.addTransaction(payment)
-                            Toast.makeText(requireContext(), "Payment verified", Toast.LENGTH_SHORT).show()
+                            // AnalyticsFragment handles the data via Firestore Snapshot,
+                            // but we call updateAnalytics to refresh the graph immediately
+                            it.updateAnalytics("WEEKLY")
+                            Toast.makeText(requireContext(), "Payment Verified & Analyzed", Toast.LENGTH_SHORT).show()
                         } ?: run {
-                            // Fallback: If fragment isn't in view yet, the data is still in Firestore
-                            Log.d("BlinknPay_QR", "ReceivedFragment not active; data will load from Cloud.")
+                            // Fallback: If fragment isn't in view yet, the SnapshotListener will pick it up
+                            Log.d("BlinknPay_QR", "AnalyticsFragment not active; SnapshotListener will sync.")
                         }
-                    }, 350) // 350ms is the "sweet spot" for Jetpack Navigation transitions
+                    }, 350)
 
                 } else {
                     Toast.makeText(requireContext(), "Transaction not found", Toast.LENGTH_SHORT).show()
@@ -1124,12 +1121,6 @@ class BluetoothFragment : Fragment(){
                 Toast.makeText(requireContext(), "Failed to fetch transaction", Toast.LENGTH_SHORT).show()
             }
     }
-
-
-
-
-
-
 
 
 
@@ -1317,64 +1308,104 @@ class BluetoothFragment : Fragment(){
 // Updated STK Push & Cloud Payment to accept merchantName
 // ----------------------------
     private fun performSTKPush(amount: Double, merchantName: String) {
+        // 1. Robust Phone Normalization (Ensures 2547XXXXXXXX format)
         val rawPhone = FirebaseAuth.getInstance().currentUser?.phoneNumber
-        val cleanPhone = rawPhone?.let { normalizePhone(it) }
+        val cleanPhone = rawPhone?.let { normalizePhone(it) } ?: "2547XXXXXXXX" // Fallback or handle error
 
-        if (cleanPhone == null) {
-            Toast.makeText(requireContext(), "Invalid phone number", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val timestamp = getTimestamp()
-        val password = generatePassword(SHORTCODE, PASSKEY, timestamp)
-
-        val request = STKPushRequest(
-            BusinessShortCode = SHORTCODE,
-            Password = password,
-            Timestamp = timestamp,
-            Amount = amount,
-            PartyA = cleanPhone,
-            PartyB = SHORTCODE,
-            PhoneNumber = cleanPhone,
-            CallBackURL = CALLBACK_URL,
-            AccountReference = "BlinknPay",
-            TransactionDesc = "Payment to $merchantName",
-            TransactionType = "CustomerPayBillOnline"
+        val timestamp = getTimestamp() // Format: yyyyMMddHHmmss
+        val password = android.util.Base64.encodeToString(
+            ("${SHORTCODE}${PASSKEY}${timestamp}").toByteArray(),
+            android.util.Base64.NO_WRAP
         )
 
+        // 2. Fetch Fresh Token using the universal getAccessToken
         getAccessToken(CONSUMER_KEY, CONSUMER_SECRET) { token ->
-            activity?.runOnUiThread {
-                if (!isAdded || token == null) {
-                    if (token == null) Toast.makeText(requireContext(), "M-Pesa Token Error", Toast.LENGTH_SHORT).show()
-                    return@runOnUiThread
+            if (token == null) {
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(requireContext(), "M-Pesa Token Error", Toast.LENGTH_SHORT).show()
+                }
+                return@getAccessToken
+            }
+
+            // 3. Prepare JSON Body (Universal for Retrofit or raw OkHttp)
+            val jsonBody = org.json.JSONObject().apply {
+                put("BusinessShortCode", SHORTCODE)
+                put("Password", password)
+                put("Timestamp", timestamp)
+                put("TransactionType", "CustomerPayBillOnline")
+                put("Amount", amount.toInt()) // Daraja prefers Integers for sandbox
+                put("PartyA", cleanPhone)
+                put("PartyB", SHORTCODE)
+                put("PhoneNumber", cleanPhone)
+                put("CallBackURL", CALLBACK_URL)
+                put("AccountReference", merchantName.take(12)) // Max 12 chars
+                put("TransactionDesc", "Pay $merchantName")
+            }
+
+
+
+
+
+
+            // 🛡️ UNIVERSAL FIX: Use the explicit get() method to avoid ambiguity
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val body = okhttp3.RequestBody.create(mediaType, jsonBody.toString())
+
+            val request = okhttp3.Request.Builder()
+                .url("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest")
+                .post(body)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            // 4. Standard OkHttp Call (Studio 4.1.3 Golden Standard)
+            val client = okhttp3.OkHttpClient.Builder()
+                .connectTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
+                .build()
+
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                    Handler(Looper.getMainLooper()).post {
+                        if (isAdded) Toast.makeText(context, "Network Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
-                // Using the new Extension Function
-                RetrofitClient.darajaApi.stkPush("Bearer $token", request).enqueue(
-                    onSuccess = { body ->
-                        if (!isAdded) return@enqueue
-                        if (body.ResponseCode == "0") {
-                            Toast.makeText(requireContext(), "STK Push sent to phone", Toast.LENGTH_LONG).show()
-                            savePendingTransaction(amount, merchantName)
+
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    // 🔑 STUDIO 4.1.3 FIX: Capture code and body immediately
+                    val code = response.code
+                    val responseBody = response.body?.string()
+
+                    Handler(Looper.getMainLooper()).post {
+                        if (!isAdded) return@post
+
+                        if (response.isSuccessful && responseBody != null) {
+                            val json = org.json.JSONObject(responseBody)
+
+                            if (json.optString("ResponseCode") == "0") {
+                                // ✅ SUCCESS: STK PUSH SENT
+                                Toast.makeText(context, "Confirm on phone...", Toast.LENGTH_LONG).show()
+
+                                // 🛡️ UNIVERSAL BRIDGE FIX:
+                                // Use BlinknPayGlobals instead of the Service class
+                                BlinknPayGlobals.isPaymentPending = true
+                                BlinknPayGlobals.activeMerchantName = merchantName
+
+                                savePendingTransaction(amount, merchantName)
+                            } else {
+                                val msg = json.optString("CustomerMessage", "STK Push Failed")
+                                Toast.makeText(context, "M-Pesa: $msg", Toast.LENGTH_LONG).show()
+                            }
                         } else {
-                            Toast.makeText(requireContext(), "M-Pesa: ${body.CustomerMessage}", Toast.LENGTH_LONG).show()
+                            Log.e("BlinknPay_STK", "Error $code: $responseBody")
+                            Toast.makeText(context, "M-Pesa Error: $code", Toast.LENGTH_SHORT).show()
                         }
-                    },
-                    onError = { code, errorBody ->
-                        if (!isAdded) return@enqueue
-                        Log.e("STK_ERROR", "Code: $code Body: $errorBody")
-                        Toast.makeText(requireContext(), "STK Failed: $code", Toast.LENGTH_SHORT).show()
-                    },
-                    onFailure = { t ->
-                        if (!isAdded) return@enqueue
-                        Log.e("STK_FAIL", "Connection Failure: ${t.message}")
-                        Toast.makeText(requireContext(), "Network Error", Toast.LENGTH_SHORT).show()
                     }
-                )
-            }
+                }
+
+            })
         }
     }
-
 
 
 
@@ -1515,7 +1546,9 @@ class BluetoothFragment : Fragment(){
         })
     }
 
-    // Function to get access token
+
+
+
     private fun getAccessToken(
         consumerKey: String,
         consumerSecret: String,
@@ -1523,25 +1556,59 @@ class BluetoothFragment : Fragment(){
     ) {
         val url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
         val credentials = "$consumerKey:$consumerSecret"
-        val basicAuth = "Basic " + android.util.Base64.encodeToString(credentials.toByteArray(), android.util.Base64.NO_WRAP)
+        val basicAuth = "Basic " + android.util.Base64.encodeToString(
+            credentials.toByteArray(),
+            android.util.Base64.NO_WRAP
+        )
 
-        val client = OkHttpClient()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
+
         val request = Request.Builder()
             .url(url)
             .get()
             .addHeader("Authorization", basicAuth)
+            .addHeader("Cache-Control", "no-cache")
             .build()
 
-        client.newCall(request).enqueueSimple { success, body ->
-            if (success && body != null) {
-                val json = org.json.JSONObject(body)
-                val accessToken = json.optString("access_token", null)
-                callback(accessToken)
-            } else {
-                callback(null)
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
+                Log.e("BlinknPay_Auth", "Network Failure: ${e.message}")
+                Handler(Looper.getMainLooper()).post { callback(null) }
             }
-        }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                // 🔑 STUDIO 4.1.3 FIX: Capture these immediately
+                val code = response.code
+                val body = response.body?.string() // Captured as a string variable
+
+                if (response.isSuccessful && body != null) {
+                    try {
+                        val json = org.json.JSONObject(body)
+                        val accessToken = json.optString("access_token", null)
+
+                        Handler(Looper.getMainLooper()).post {
+                            callback(accessToken)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("BlinknPay_Auth", "JSON Error: ${e.message}")
+                        Handler(Looper.getMainLooper()).post { callback(null) }
+                    }
+                } else {
+                    // Now we can log exactly what went wrong using 'code' and 'body'
+                    Log.e("BlinknPay_Auth", "M-Pesa Server Error. Code: $code | Response: $body")
+                    Handler(Looper.getMainLooper()).post { callback(null) }
+                }
+            }
+        })
     }
+
+
+
+
+
 
 
 

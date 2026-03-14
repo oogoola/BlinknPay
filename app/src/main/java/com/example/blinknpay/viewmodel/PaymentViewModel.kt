@@ -1,142 +1,157 @@
-package com.blinknpay.viewmodel
+package com.example.blinknpay
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.blinknpay.data.BalanceRepository
+import java.util.regex.Pattern
+import java.util.Locale
 
 class PaymentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = BalanceRepository(application)
     private val mainHandler = Handler(Looper.getMainLooper())
 
+    // --- LIVEDATA ---
     private val _balance = MutableLiveData<Double>(0.0)
     val balance: LiveData<Double> get() = _balance
 
-    private val _isPrivacyActive = MutableLiveData<Boolean>(false)
+    private val _isPrivacyActive = MutableLiveData<Boolean>(true)
     val isPrivacyActive: LiveData<Boolean> get() = _isPrivacyActive
 
     private val _selectedRail = MutableLiveData<String>("MPESA")
     val selectedRail: LiveData<String> get() = _selectedRail
 
-    /**
-     * ✅ Real-time SMS Observer
-     * Listens for changes in the SMS ContentProvider
-     */
+    // NEW: Category for the Analytics Card
+    private val _currentCategory = MutableLiveData<String>("GENERAL")
+    val currentCategory: LiveData<String> get() = _currentCategory
+
+    private val _lastTransactionType = MutableLiveData<String>("UNKNOWN")
+    val lastTransactionType: LiveData<String> get() = _lastTransactionType
+
+    // --- SMS OBSERVER ---
     private val smsObserver = object : ContentObserver(mainHandler) {
         override fun onChange(selfChange: Boolean) {
             super.onChange(selfChange)
-            Log.d("BlinknPay_Observer", "SMS Database change detected. Syncing...")
-
-            // Wait 2 seconds for the message to fully commit to the database
-            mainHandler.postDelayed({
-                refreshBalance()
-            }, 2000)
+            Log.d("BlinknPay_Observer", "SMS Change detected. Refreshing...")
+            // Wait 2 seconds for M-Pesa/Airtel to finish writing the SMS to the database
+            mainHandler.postDelayed({ refreshBalance() }, 2000)
         }
     }
 
     init {
-        // Register the observer for the base SMS URI
+        registerObserver()
+        refreshBalance()
+    }
+
+    private fun registerObserver() {
         try {
-            application.contentResolver.registerContentObserver(
+            getApplication<Application>().contentResolver.registerContentObserver(
                 Uri.parse("content://sms/"),
                 true,
                 smsObserver
             )
         } catch (e: Exception) {
-            Log.e("BlinknPay_Error", "Failed to register SMS observer: ${e.message}")
+            Log.e("BlinknPay_Error", "Observer Registration Failed: ${e.message}")
         }
+    }
 
-        // Initial fetch
+    fun refreshBalance() {
+        val currentRail = _selectedRail.value ?: "MPESA"
+        fetchLatestTransactionData(currentRail)
+    }
+
+    private fun fetchLatestTransactionData(rail: String) {
+        val sender = if (rail == "MPESA") "MPESA" else "AIRTELMONEY"
+        val context = getApplication<Application>()
+
+        val cursor = context.contentResolver.query(
+            Uri.parse("content://sms/inbox"),
+            arrayOf("body"),
+            "address = ?",
+            arrayOf(sender),
+            "date DESC LIMIT 1"
+        )
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val body = it.getString(0)
+
+                // 1. Direction & Category Classification
+                val direction = classifyDirection(body)
+                val category = inferCategory(body)
+
+                _lastTransactionType.postValue(direction)
+                _currentCategory.postValue(category)
+
+                // 2. Parse Balance
+                parseBalanceFromBody(body)
+            }
+        }
+    }
+
+    private fun parseBalanceFromBody(body: String) {
+        // Updated Pattern for 2026 M-Pesa formats (handles New Balance and Balance is...)
+        val balancePattern = Pattern.compile("(?:New M-PESA balance is|balance is|New Balance) KES\\s*([\\d,]+\\.\\d{2})", Pattern.CASE_INSENSITIVE)
+        val matcher = balancePattern.matcher(body)
+
+        if (matcher.find()) {
+            val amountStr = matcher.group(1)?.replace(",", "")
+            _balance.postValue(amountStr?.toDouble() ?: 0.0)
+        }
+    }
+
+    /**
+     * 🧠 CATEGORY ENGINE: Inferred categorization for unregistered merchants
+     */
+    private fun inferCategory(body: String): String {
+        val b = body.toUpperCase(Locale.getDefault())
+        return when {
+            // Food & Merchant logic
+            b.contains("KFC") || b.contains("QUICKMART") || b.contains("NAIVAS") || b.contains("GLOVO") -> "FOOD & DRINK"
+
+            // Transport logic
+            b.contains("UBER") || b.contains("BOLT") || b.contains("SUPER METRO") || b.contains("EASYCOACH") -> "TRANSPORT"
+
+            // Utility logic
+            b.contains("KPLC") || b.contains("TOKEN") || b.contains("NAIROBI WATER") -> "UTILITIES"
+
+            // Airtime
+            b.contains("AIRTIME") -> "AIRTIME"
+
+            else -> "GENERAL"
+        }
+    }
+
+    private fun classifyDirection(body: String): String {
+        val b = body.toUpperCase(Locale.getDefault())
+        return when {
+            b.contains("SENT TO") || b.contains("PAID TO") || b.contains("BOUGHT") ||
+                    b.contains("PAY BILL") || b.contains("WITHDRAWN") -> "SENT"
+            b.contains("RECEIVED") || b.contains("DEPOSIT") -> "RECEIVED"
+            else -> "UNKNOWN"
+        }
+    }
+
+    // --- UI ACTIONS ---
+    fun togglePrivacy() {
+        _isPrivacyActive.value = !(_isPrivacyActive.value ?: true)
+    }
+
+    fun setRail(rail: String) {
+        if (_selectedRail.value == rail) return
+        _selectedRail.value = rail
         refreshBalance()
     }
 
-    /**
-     * Refreshes the balance by passing the active rail to the repository.
-     */
-    fun refreshBalance() {
-        val currentRail = _selectedRail.value ?: "MPESA"
-        val latestBalance = repository.fetchLatestBalance(currentRail)
-
-        // Only update if the value actually changed to avoid UI flicker
-        if (_balance.value != latestBalance) {
-            _balance.postValue(latestBalance)
-        }
+    fun setCategory(category: String) {
+        _currentCategory.value = category
     }
 
-    fun togglePrivacy() {
-        _isPrivacyActive.value = !(_isPrivacyActive.value ?: false)
-    }
-
-
-
-
-
-    fun setRail(rail: String) {
-        // 1. Prevent redundant updates if the rail hasn't actually changed
-        if (_selectedRail.value == rail) return
-
-        _selectedRail.value = rail
-
-        // 2. Logic Branching
-        when (rail) {
-            "MPESA", "AIRTEL" -> {
-                // M-Pesa and Airtel are handled by the SMS ContentObserver.
-                // Calling refreshBalance() pulls the latest from the SMS inbox.
-                refreshBalance()
-            }
-            "KCB", "EQUITY" -> {
-                /* IMPORTANT: For Banks, we reset the balance to 0.0 or a "stale" state.
-                   This forces the Fragment to trigger the USSD Fetcher.
-                   It also ensures the user doesn't accidentally think their M-Pesa
-                   money is sitting in their Equity account.
-                */
-                _balance.postValue(0.0)
-
-                // Log this so we can track the rail switch in Logcat
-                Log.d("BlinknPay_Rail", "Switched to $rail. Awaiting USSD manual sync.")
-            }
-        }
-    }
-
-
-
-    /**
-     * Manually updates the live balance for non-SMS rails (KCB/Equity/Airtel)
-     * This ensures the 'Pay' dialog sees the correct float after a USSD fetch.
-     */
-    fun updateBalanceManually(newBalance: Double) {
-        // 1. Update the LiveData so the UI (tvMainBalance) updates instantly
-        _balance.postValue(newBalance)
-
-        // 2. Optional: If you have a local database (Room), save it there
-        // to keep the balance visible even after the app restarts.
-        // repository.saveLastKnownBalance(selectedRail.value, newBalance)
-
-        Log.d("BlinknPay_VM", "Balance manually updated for ${selectedRail.value}: $newBalance")
-    }
-
-
-
-
-
-
-
-    
-
-
-    /**
-     * ✅ Clean up to prevent memory leaks and battery drain
-     */
     override fun onCleared() {
         super.onCleared()
         getApplication<Application>().contentResolver.unregisterContentObserver(smsObserver)

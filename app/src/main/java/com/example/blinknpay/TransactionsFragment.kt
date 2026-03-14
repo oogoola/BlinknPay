@@ -54,6 +54,7 @@ class TransactionsFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,33 +65,48 @@ class TransactionsFragment : Fragment() {
         smsSyncManager = SmsSyncManager(requireContext())
         paymentRepository = PaymentRepository(this)
 
-
-        rvTransactions = view.findViewById(R.id.rvTransactions) // Updated ID
+        rvTransactions = view.findViewById(R.id.rvTransactions)
         tvEmptyState = view.findViewById(R.id.tvEmptyState)
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
         shimmerLayout = view.findViewById(R.id.shimmerLayout)
 
         rvTransactions.layoutManager = LinearLayoutManager(requireContext())
 
+        // Initializing the adapter with the new Payment model fields
         adapter = PaymentHistoryAdapter(transactions) { payment ->
             val action = TransactionsFragmentDirections
                 .actionTransactionsFragmentToTransactionDetailsFragment()
 
+            // 🛡️ FIX: Map to new model fields
             action.transactionId = payment.id
             action.amount = payment.amount.toFloat()
-            action.sender = payment.sender
+
+            // Use externalPartyName instead of the unresolved 'sender'
+            action.sender = payment.externalPartyName
+
             action.transactionRef = payment.transactionRef
             action.timestamp = payment.timestamp
 
+            // Pass direction so the details screen shows Red/Green colors correctly
+            // Note: You may need to add 'direction' as an argument in your nav_graph.xml
+            // action.direction = payment.direction
+
             findNavController().navigate(action)
         }
+
         rvTransactions.adapter = adapter
 
-        swipeRefresh.setOnRefreshListener { checkSmsPermissionAndSync() }
+        swipeRefresh.setOnRefreshListener {
+            // Force a fresh sync when user pulls down
+            checkSmsPermissionAndSync()
+        }
 
         checkSmsPermissionAndSync()
         return view
     }
+
+
+
 
     private fun checkSmsPermissionAndSync() {
         when {
@@ -231,38 +247,46 @@ class TransactionsFragment : Fragment() {
         shimmerLayout.visibility = View.GONE
         swipeRefresh.isRefreshing = false
 
-        // 2. Data Integrity: Remove duplicates (id) and Sort
-        // This handles cases where an SMS and a Firestore doc describe the same payment
-        val distinctTransactions = transactions.distinctBy { it.id }
+        // 2. Data Integrity & Deduplication
+        // We use .id (which maps to the Transaction Reference like RCL812J9KL)
+        // to ensure an SMS and a Firestore doc don't create double bars or list items.
+        val distinctTransactions = transactions
+            .filter { it.id.isNotEmpty() }
+            .distinctBy { it.id }
             .sortedByDescending { it.timestamp }
 
-        // 3. Visibility Logic
+        // 3. Visibility & Messaging Logic
         if (distinctTransactions.isEmpty()) {
             tvEmptyState.visibility = View.VISIBLE
             rvTransactions.visibility = View.GONE
-            tvEmptyState.text = "No transactions found.\nPull down to sync M-Pesa/Airtel."
+
+            // Updated text to reflect the quad-channel and unified rail capabilities
+            tvEmptyState.text = "No transactions detected.\nPull down to sync M-Pesa, Airtel, or Bank SMS history."
         } else {
             tvEmptyState.visibility = View.GONE
             rvTransactions.visibility = View.VISIBLE
 
-            // 4. Adapter Update
-            // We pass the cleaned, sorted list to the adapter
+            // 4. Analytics Snapshot (Optional Log for Debugging)
+            val sentCount = distinctTransactions.count { it.direction == "SENT" }
+            val receivedCount = distinctTransactions.count { it.direction == "RECEIVED" }
+            Log.d("BlinknPay_UI", "Displaying $sentCount expenses and $receivedCount incomes.")
+
+            // 5. Adapter Update
             try {
+                // replaceAll ensures we don't just append, but maintain a clean, sorted state
                 adapter.replaceAll(distinctTransactions)
 
-                // If replaceAll doesn't automatically call notifyDataSetChanged,
-                // you can uncomment the line below:
-                // adapter.notifyDataSetChanged()
+                // If the RecyclerView doesn't scroll to top on new data, you can add:
+                // rvTransactions.scrollToPosition(0)
 
-                Log.d("BlinknPay_UI", "UI Updated with ${distinctTransactions.size} unique transactions")
+                Log.d("BlinknPay_UI", "UI Updated: ${distinctTransactions.size} unique payments mapped.")
             } catch (e: Exception) {
-                Log.e("BlinknPay_UI", "Adapter update failed: ${e.message}")
-                // Fallback: reload adapter if replaceAll crashes
+                Log.e("BlinknPay_UI", "Adapter Update Failure: ${e.message}")
+                // Robust fallback: Reset the adapter entirely if data mismatch occurs
                 rvTransactions.adapter = adapter
             }
         }
     }
-
 
 
 }
